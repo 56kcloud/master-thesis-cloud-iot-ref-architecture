@@ -1,0 +1,82 @@
+<mxfile host="Electron" modified="2023-10-18T14:07:00.650Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.2 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="TlSlcnuJbXDRaBspQ-LR" version="22.0.2" type="device">
+  <diagram name="Page-1" id="t5rtL05ZseUeWu8pIhkY">
+    <mxGraphModel dx="863" dy="505" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="jp-spBALW_434_0R2io_-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="170" y="210" width="250" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="440" y="210" width="130" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-3" value="Application server" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="450" y="220" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-4" value="Processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="450" y="260" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-5" value="Storage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="450" y="300" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-6" value="" style="endArrow=open;startArrow=open;html=1;rounded=0;startFill=0;endFill=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="545" y="270" as="sourcePoint" />
+            <mxPoint x="544.6600000000001" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-7" value="" style="endArrow=open;startArrow=open;html=1;rounded=0;startFill=0;endFill=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="545" y="310" as="sourcePoint" />
+            <mxPoint x="544.6600000000001" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-8" value="" style="endArrow=open;startArrow=open;html=1;rounded=0;startFill=0;endFill=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="410.0000000000001" y="234.76" as="sourcePoint" />
+            <mxPoint x="450" y="234.76" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-9" value="Communication" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="300" y="220" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-10" value="Simple&lt;br&gt;&lt;br&gt;Real-time&lt;br&gt;&lt;br&gt;Control" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="180" y="220" width="110" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-11" value="" style="endArrow=open;startArrow=none;html=1;rounded=0;startFill=0;endFill=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="130.0000000000001" y="240" as="sourcePoint" />
+            <mxPoint x="170" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-13" value="Sensor&lt;br&gt;&lt;br&gt;Input" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="70" y="210" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-14" value="Control&lt;br&gt;&lt;br&gt;Output" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="70" y="280" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-15" value="" style="endArrow=open;startArrow=none;html=1;rounded=0;startFill=0;endFill=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="170" y="309.65999999999997" as="sourcePoint" />
+            <mxPoint x="130.0000000000001" y="309.65999999999997" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-16" value="Smart Phone" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="600" y="210" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-17" value="" style="endArrow=open;startArrow=open;html=1;rounded=0;startFill=0;endFill=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560.0000000000001" y="234.66" as="sourcePoint" />
+            <mxPoint x="600" y="234.66" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-19" value="Cloud computing" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#6C8EBF;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="450" y="190" width="110" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="jp-spBALW_434_0R2io_-20" value="Embedded system" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#82B366;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="240" y="190" width="110" height="10" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
