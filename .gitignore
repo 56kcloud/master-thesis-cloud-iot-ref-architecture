@@ -38,6 +38,8 @@
 *.pyg
 *.mtc*
 *.lol
+*.fls
+*.xdv
 
 # Minted
 _minted*
