@@ -94,7 +94,20 @@ Each label in the table corresponds to a task. A task can contain a priority lev
 \section{Project management tools}
 
 % -- Your text goes here --
-\subsection{Version control}
+\subsection{Version management}
+Version management, embodied by tools such as Git, remains an essential part of the software development ecosystem. This practice offers a structured approach to tracking and maintaining changes to a project's code. One of the major benefits lies in its ability to keep a complete history of changes, facilitating collaboration between team members working on the same project.
+\begin{center}
+    \begingroup
+    \includegraphics[width=0.8\columnwidth]{methodology/version_control.pdf}
+    \captionof{figure}{Example of version management with two branches}
+    \label{fig:version_control}
+    \endgroup
+\end{center}
+An example of a visual representation of a project is shown in figure \ref{fig:version_control}, comprising several distinct versions and branches. Branches allow developers to work on alternative versions of the source code, facilitating parallel development, feature isolation and efficient change management without affecting the main branch.
+
+When part of the development is considered complete, it becomes common practice to create a new version. This version freezes the current state of the project at a specific point in time, providing a clear and stable reference. This ability to create versions means that it is possible to return to previous states of the project if problems arise, whether identified by members of the development team or by external stakeholders, such as customers.
+
+In short, version management, embodied by Git, transcends its simple function of tracking changes to become a central pillar of collaborative working, risk management and preserving the integrity of a software project. Its widespread adoption across the industry is testament to its continuing importance in delivering robust, scalable software development projects.
 
 \subsection{\acrfull{ci} and \acrfull{cd}}
 
