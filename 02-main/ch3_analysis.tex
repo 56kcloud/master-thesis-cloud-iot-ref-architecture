@@ -106,7 +106,7 @@ The sources were mainly conference papers. Some information was found on website
     \item[—] \gls{cloud} platforms
     \item[—] \acrlong{iac}
     \item[—] \acrshort{iac} tools
-    \item[—] \gls{arm} SystemReady
+    \item[—] \nameref{sec:arm_systemready}
 \end{itemize}
 
 
@@ -283,11 +283,12 @@ Focusing on the practical side, other disparities were noted. These stem from a 
 
 % ------------------------------------------------------------------------------
 \section{\texorpdfstring{\gls{arm}}{} SystemReady}
+\label{sec:arm_systemready}
 
 % -- Your text goes here --
 Manufacturer \gls{arm} has decided to introduce a certification programme called SystemReady \cite{systemready_program}. In 2020, as part of \gls{arm}'s Cassini project, SystemReady was introduced to address the compatibility concerns of users planning to move from x86 architectures to systems based on \gls{arm}'s processors \cite{systemready_approval}. \gls{arm} defines its programme as follows:
 \begin{quote}
-    \textit{\gls{arm} SystemReady is a compliance certification program based on a set of hardware and firmware standards: \acrfull{bsa} and \acrfull{bbr} specifications, plus a selection of supplements. This ensures that subsequent layers of software also ‘just work’. The compliance certification program tests and certifies that systems meet the SystemReady standards, giving confidence that operating systems \acrshort{os} and subsequent layers of software just work. \cite{systemready_program}}\\
+    \textit{\nameref{sec:arm_systemready} is a compliance certification program based on a set of hardware and firmware standards: \acrfull{bsa} and \acrfull{bbr} specifications, plus a selection of supplements. This ensures that subsequent layers of software also ‘just work’. The compliance certification program tests and certifies that systems meet the SystemReady standards, giving confidence that operating systems \acrshort{os} and subsequent layers of software just work. \cite{systemready_program}}\\
 \end{quote}
 
 The \gls{arm} \acrshort{bsa} specification establishes a hardware basis for system software, including \acrshort{os}s, hypervisors and firmware, based on the 64-bit \gls{arm} architecture. This specification ensures that users can install, boot and run generic \acrshort{os}s and hypervisors \cite{bsa_standard}. The \acrshort{bbr} specification complements \acrshort{bsa} by defining the basic firmware requirements necessary to support any \acrshort{os} or hypervisor compatible with the \acrshort{bsa} specification \cite{bbr_standard}.
