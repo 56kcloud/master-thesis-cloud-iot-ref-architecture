@@ -35,3 +35,30 @@ The central service managing the \acrshort{iot} is \gls{aws} \acrshort{iot} Core
 
 \subsection{Embedded systems integration}
 Embedded systems must be based on \gls{arm} architecture and be \nameref{sec:arm_systemready} certified. The devices are flashed with a custom Linux \acrshort{os} image. On first boot, two software programs are installed : Docker Engine for running Docker containers, and \gls{aws} \acrshort{iot} Greengrass Core for \gls{provisioning}, communicating with \gls{aws} \acrshort{iot} Core and managing Greengrass components. This software provisions the device by exchanging the claim certificate with a unique certificate, securing the connection of the device, which is then registered in the device group. Deployment of Greengrass components from the \gls{cloud} to devices is automated when a new device is associated or a new version of a component becomes available. Applications are contained in Docker containers to ensure optimum portability.
+
+
+% ------------------------------------------------------------------------------
+\section{\texorpdfstring{\acrshort{ci}/\acrshort{cd}}{} pipeline}
+
+% -- Your text goes here --
+The pipeline is made up of several workflows, each dedicated to a specific function. An overview of the various stages in the pipeline is shown in figure \ref{fig:CICD_Pipeline_Overview}. The pipeline uses \acrshort{ci}/\acrshort{cd} methods to automate the deployment of the \gls{cloud_infrastructure}, as well as preparing for the integration of embedded systems.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{design/CICD_Pipeline_Overview.pdf}
+    \captionof{figure}{\acrshort{ci}/\acrshort{cd} workflows overview}
+    \label{fig:CICD_Pipeline_Overview}
+    \endgroup
+\end{center}
+The first job is to deploy the \gls{aws} \gls{cloud_infrastructure} (\textit{Deploy infrastructure}). It can enable the deployment of development or production infrastructure. Since it uses a tool called \acrshort{iac}, the state of the infrastructure must be stored. This flow also enables resources to be updated.
+
+If the entire infrastructure is deployed without error, the provisioning configuration workflow (\textit{Setup \gls{provisioning}}) takes care of preparing configuration files for \gls{provisioning} in a storage space. It also manages device control. It checks the list of authorised devices to identify whether a previously provisioned device has been removed from the list. If so, it will be removed from the \gls{cloud}. It may also be the case that authorised devices have already been provisioned and need to be connected to the new infrastructure. This operation is also checked and carried out.
+
+If the previous step has been successful, the next step (\textit{Build custom \acrshort{os}}) is to prepare and create the \acrshort{os} image with all the files and scripts needed to automatically provision the devices when they start up for the first time. The image must be saved in a storage space that allows it to be downloaded for flashing the devices' SD cards.
+
+In parallel with the previous two workflows, the application workflows are launched. The first (\textit{Test applications}) performs various tests on the applications. It includes security and unit tests.
+
+If the tests have not failed, the next job (\textit{Build applications}) is to build the Greengrass components from the applications. A Docker image is first created for each of the applications, coded in a freely chosen programming language. These images are then linked to their respective components. Finally, the components must be saved in the \gls{aws} \acrshort{iot} Greengrass service to be ready for deployment.
+
+The last flow (\textit{Deploy applications}) takes care of deploying applications to the device group. It uses the Greengrass Deployment service.
+
+After all these tasks, there is still the infrastructure dismantling workflow (\textit{Destroy infrastructure}). It is independent and can be launched manually. It is available in the event that a problem occurs and the infrastructure needs to be redeployed.
