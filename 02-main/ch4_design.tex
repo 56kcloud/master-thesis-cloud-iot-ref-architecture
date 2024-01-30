@@ -62,3 +62,50 @@ If the tests have not failed, the next job (\textit{Build applications}) is to b
 The last flow (\textit{Deploy applications}) takes care of deploying applications to the device group. It uses the Greengrass Deployment service.
 
 After all these tasks, there is still the infrastructure dismantling workflow (\textit{Destroy infrastructure}). It is independent and can be launched manually. It is available in the event that a problem occurs and the infrastructure needs to be redeployed.
+
+% ------------------------------------------------------------------------------
+\section{Applications}
+
+% -- Your text goes here --
+Several applications have been developed. Some are essential to the reference architecture, while others are demonstration applications. An overview of these is shown in figure \ref{fig:apps_overview}.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{design/apps_overview.pdf}
+    \captionof{figure}{Applications overview}
+    \label{fig:apps_overview}
+    \endgroup
+\end{center}
+
+\subsection{OS update}
+The application used to update \acrlong{os} features is essential to the reference architecture. Keeping Linux up to date is essential for security, stability, performance and compatibility. Security updates correct vulnerabilities, minimising the risk of exploitation by malicious software. Bug fixes and performance optimisations improve system stability and efficiency. Updating also ensures compliance with security requirements and adaptation to new features and standards. By keeping a Linux \acrshort{os} up to date, users can ensure that their system runs at optimum performance while keeping pace with technological developments and industry requirements.
+
+This application does not run in a Docker container, but directly in the Greengrass component. The operation of the application must be kept simple. A state diagram in figure \ref{fig:state_diagram_OS_update} shows this.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.25\columnwidth]{design/state_diagram_OS_update.pdf}
+    \captionof{figure}{\acrshort{os} update application state diagram}
+    \label{fig:state_diagram_OS_update}
+    \endgroup
+\end{center}
+When the component starts up the first time the device is launched or after it has been updated, it will execute the Linux commands that have been written. To enable a complete update, the device will restart automatically. The component executes the Linux commands only once for each new version of the component.
+
+\subsection{Certificate rotation}
+On embedded systems communicating with \gls{aws}, unique certificates are used to establish secure connections via the protocols. Certificates have expiry dates for security reasons. The use of certificates with an expiry date makes it possible to limit the time during which a certificate is considered valid. This helps to reduce the risks associated with compromised private keys and ensures that certificates are regularly renewed, incorporating the latest security standards. It is therefore crucial to update certificates on embedded systems before their expiry date. If a certificate expires, secure connections with \gls{cloud} services may be interrupted, leading to communication problems. To avoid this, this application must allow certificates to be managed automatically. It works with the \gls{aws} \acrshort{iot} Device Defender service, which alerts the application when it is time to change a certificate.
+
+This application runs in a Docker container. A state diagram illustrates its behaviour in figure \ref{fig:state_diagram_certificate_rotator}.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.6\columnwidth]{design/state_diagram_certificate_rotator.pdf}
+    \captionof{figure}{Certificate rotator application state diagram}
+    \label{fig:state_diagram_certificate_rotator}
+    \endgroup
+\end{center}
+The general idea is that it is alerted by the \acrshort{iot} Device Defender service when a certificate change is required. The application then creates a new private key and makes a certificate creation request (\acrfull{csr}) to the Amazon root certificate authority. A signed certificate is returned. This will replace the old certificate and the old private key with the new one. In order for the \gls{aws} \acrshort{iot} Greengrass Core service to take the new certificate into account during future communications, this service must be restarted on the device.
+
+\subsection{Led application}
+Use case
+
+\subsection{Button application}
+Use case
+
+\subsection{Corrupt application}
