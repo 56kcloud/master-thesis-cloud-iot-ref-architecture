@@ -31,7 +31,7 @@ The reference architecture is divided into two parts: the first concerns embedde
 \subsection{\Gls{cloud_infrastructure}}
 In the \gls{cloud}, two distinct infrastructures are presented. The first infrastructure is dedicated to development, enabling all kinds of operations to be tested. The second infrastructure is the production infrastructure, encompassing the final product intended for customers. Each infrastructure uses different \gls{aws} services.
 
-The central service managing the \acrshort{iot} is \gls{aws} \acrshort{iot} Core, which exchanges data with all connected devices. Its preferred communication protocol is MQTT. Provisioned devices are registered in a specific group within this service. Only authorised devices are provisioned. \gls{aws} \acrshort{iot} Greengrass Deployment handles the deployment of new Greengrass components or updates to a group of devices. A component, in the context of \gls{aws} \acrshort{iot} Greengrass, is a unit of deployment and execution that encapsulates code, dependencies and resources, making it easy to deploy, manage and update \acrshort{iot} applications. In this architecture, Docker components are used, encapsulating Docker containers to offer greater flexibility in software deployment. Docker images are stored in the Amazon Elastic Container Registry (ECR). Another service, \gls{aws} \acrshort{iot} Device Defender, checks daily whether a certificate is about to expire, as each device has a unique certificate enabling a secure connection. If a certificate expires within 30 days, it is replaced by a new one. Other Lambda functions, triggered by rules, can enrich the architecture, as can other \gls{aws} resources, depending on the needs of each developer. Storage spaces such as Amazon S3 are used to save the state of the infrastructure, configuration files and \acrshort{os} images. The configuration files contain a list of the serial numbers of all the \acrshort{iot} devices authorised to be provisioned. If a device is not listed and attempts to be provisioned, access will be denied. If a device is already provisioned and its serial number is removed from the list, its access will be withdrawn and it will be deleted from the \gls{cloud}. The IAM service is there to assign roles and policies, limiting authorised actions on resources to the strict minimum.
+The central service managing the \acrshort{iot} is \gls{aws} \acrshort{iot} Core, which exchanges data with all connected devices. Its preferred communication protocol is \acrshort{mqtt}. Provisioned devices are registered in a specific group within this service. Only authorised devices are provisioned. \gls{aws} \acrshort{iot} Greengrass Deployment handles the deployment of new Greengrass components or updates to a group of devices. A component, in the context of \gls{aws} \acrshort{iot} Greengrass, is a unit of deployment and execution that encapsulates code, dependencies and resources, making it easy to deploy, manage and update \acrshort{iot} applications. In this architecture, Docker components are used, encapsulating Docker containers to offer greater flexibility in software deployment. Docker images are stored in the Amazon Elastic Container Registry (ECR). Another service, \gls{aws} \acrshort{iot} Device Defender, checks daily whether a certificate is about to expire, as each device has a unique certificate enabling a secure connection. If a certificate expires within 30 days, it is replaced by a new one. Other Lambda functions, triggered by rules, can enrich the architecture, as can other \gls{aws} resources, depending on the needs of each developer. Storage spaces such as Amazon S3 are used to save the state of the infrastructure, configuration files and \acrshort{os} images. The configuration files contain a list of the serial numbers of all the \acrshort{iot} devices authorised to be provisioned. If a device is not listed and attempts to be provisioned, access will be denied. If a device is already provisioned and its serial number is removed from the list, its access will be withdrawn and it will be deleted from the \gls{cloud}. The IAM service is there to assign roles and policies, limiting authorised actions on resources to the strict minimum.
 
 \subsection{Embedded systems integration}
 Embedded systems must be based on \gls{arm} architecture and be \nameref{sec:arm_systemready} certified. The devices are flashed with a custom Linux \acrshort{os} image. On first boot, two software programs are installed : Docker Engine for running Docker containers, and \gls{aws} \acrshort{iot} Greengrass Core for \gls{provisioning}, communicating with \gls{aws} \acrshort{iot} Core and managing Greengrass components. This software provisions the device by exchanging the claim certificate with a unique certificate, securing the connection of the device, which is then registered in the device group. Deployment of Greengrass components from the \gls{cloud} to devices is automated when a new device is associated or a new version of a component becomes available. Applications are contained in Docker containers to ensure optimum portability.
@@ -76,15 +76,15 @@ Several applications have been developed. Some are essential to the reference ar
     \endgroup
 \end{center}
 
-\subsection{OS update}
+\subsection{\acrshort{os} update}
 The application used to update \acrlong{os} features is essential to the reference architecture. Keeping Linux up to date is essential for security, stability, performance and compatibility. Security updates correct vulnerabilities, minimising the risk of exploitation by malicious software. Bug fixes and performance optimisations improve system stability and efficiency. Updating also ensures compliance with security requirements and adaptation to new features and standards. By keeping a Linux \acrshort{os} up to date, users can ensure that their system runs at optimum performance while keeping pace with technological developments and industry requirements.
 
-This application does not run in a Docker container, but directly in the Greengrass component. The operation of the application must be kept simple. A state diagram in figure \ref{fig:state_diagram_OS_update} shows this.
+This application does not run in a Docker container, but directly in the Greengrass component. The operation of the application must be kept simple. An activity diagram in figure \ref{fig:activity_diagram_OS_update} shows this.
 \begin{center}
     \begingroup
-    \includegraphics[width=.25\columnwidth]{design/state_diagram_OS_update.pdf}
-    \captionof{figure}{\acrshort{os} update application state diagram}
-    \label{fig:state_diagram_OS_update}
+    \includegraphics[width=.25\columnwidth]{design/activity_diagram_OS_update.pdf}
+    \captionof{figure}{\acrshort{os} update application activity diagram}
+    \label{fig:activity_diagram_OS_update}
     \endgroup
 \end{center}
 When the component starts up the first time the device is launched or after it has been updated, it will execute the Linux commands that have been written. To enable a complete update, the device will restart automatically. The component executes the Linux commands only once for each new version of the component.
@@ -92,20 +92,29 @@ When the component starts up the first time the device is launched or after it h
 \subsection{Certificate rotation}
 On embedded systems communicating with \gls{aws}, unique certificates are used to establish secure connections via the protocols. Certificates have expiry dates for security reasons. The use of certificates with an expiry date makes it possible to limit the time during which a certificate is considered valid. This helps to reduce the risks associated with compromised private keys and ensures that certificates are regularly renewed, incorporating the latest security standards. It is therefore crucial to update certificates on embedded systems before their expiry date. If a certificate expires, secure connections with \gls{cloud} services may be interrupted, leading to communication problems. To avoid this, this application must allow certificates to be managed automatically. It works with the \gls{aws} \acrshort{iot} Device Defender service, which alerts the application when it is time to change a certificate.
 
-This application runs in a Docker container. A state diagram illustrates its behaviour in figure \ref{fig:state_diagram_certificate_rotator}.
+This application runs in a Docker container. An activity diagram illustrates its behaviour in figure \ref{fig:activity_diagram_certificate_rotator}.
 \begin{center}
     \begingroup
-    \includegraphics[width=.6\columnwidth]{design/state_diagram_certificate_rotator.pdf}
-    \captionof{figure}{Certificate rotator application state diagram}
-    \label{fig:state_diagram_certificate_rotator}
+    \includegraphics[width=.6\columnwidth]{design/activity_diagram_certificate_rotator.pdf}
+    \captionof{figure}{Certificate rotator application activity diagram}
+    \label{fig:activity_diagram_certificate_rotator}
     \endgroup
 \end{center}
 The general idea is that it is alerted by the \acrshort{iot} Device Defender service when a certificate change is required. The application then creates a new private key and makes a certificate creation request (\acrfull{csr}) to the Amazon root certificate authority. A signed certificate is returned. This will replace the old certificate and the old private key with the new one. In order for the \gls{aws} \acrshort{iot} Greengrass Core service to take the new certificate into account during future communications, this service must be restarted on the device.
 
 \subsection{Led application}
-Use case
+This application is not essential to the reference architecture. It is used as a demonstration for \acrshort{mqtt} communication with \gls{aws} \acrshort{iot}. It is an application in a Docker container that blinks an led on an embedded system. The blinking frequency can be adjusted from an application associated with \gls{aws} \acrshort{iot} using the \acrshort{mqtt} protocol. Blinking can also be enabled or disabled from the \hyperref[subsec:button_app]{button application}. Two pieces of data, the blink frequency and the blink state, are transmitted to \gls{aws} \acrshort{iot} so that they can be viewed on an interface. This is shown in figure \ref{fig:use_case_led_button_apps}.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{design/use_case_led_button_apps.pdf}
+    \captionof{figure}{Led and button applications use case}
+    \label{fig:use_case_led_button_apps}
+    \endgroup
+\end{center}
 
 \subsection{Button application}
-Use case
+\label{subsec:button_app}
+This application is connected to the \hyperref[subsec:led_app]{led application} while retaining its independence. It is designed as a demonstration of local \acrshort{mqtt} communication. Also running in a Docker container, it simply interacts with the \hyperref[subsec:led_app]{led application} to activate or deactivate the blinking of the led. The user simply presses a button built into the device to reverse the blinking state. A high-level view is shown in figure \ref{fig:use_case_led_button_apps}.
 
 \subsection{Corrupt application}
+A corrupted application is also developed to examine the behaviour of the device with \gls{aws} services. The approach is to run a simple Docker application by deliberately providing an incorrect environment for launching the container.
