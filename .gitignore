@@ -40,6 +40,7 @@
 *.lol
 *.fls
 *.xdv
+.cache
 
 # Minted
 _minted*
