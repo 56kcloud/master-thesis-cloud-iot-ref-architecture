@@ -103,6 +103,7 @@ This application runs in a Docker container. An activity diagram illustrates its
 The general idea is that it is alerted by the \acrshort{iot} Device Defender service when a certificate change is required. The application then creates a new private key and makes a certificate creation request (\acrfull{csr}) to the Amazon root certificate authority. A signed certificate is returned. This will replace the old certificate and the old private key with the new one. In order for the \gls{aws} \acrshort{iot} Greengrass Core service to take the new certificate into account during future communications, this service must be restarted on the device.
 
 \subsection{Led application}
+\label{subsec:led_app}
 This application is not essential to the reference architecture. It is used as a demonstration for \acrshort{mqtt} communication with \gls{aws} \acrshort{iot}. It is an application in a Docker container that blinks an led on an embedded system. The blinking frequency can be adjusted from an application associated with \gls{aws} \acrshort{iot} using the \acrshort{mqtt} protocol. Blinking can also be enabled or disabled from the \hyperref[subsec:button_app]{button application}. Two pieces of data, the blink frequency and the blink state, are transmitted to \gls{aws} \acrshort{iot} so that they can be viewed on an interface. This is shown in figure \ref{fig:use_case_led_button_apps}.
 \begin{center}
     \begingroup
@@ -114,7 +115,7 @@ This application is not essential to the reference architecture. It is used as a
 
 \subsection{Button application}
 \label{subsec:button_app}
-This application is connected to the \hyperref[subsec:led_app]{led application} while retaining its independence. It is designed as a demonstration of local \acrshort{mqtt} communication. Also running in a Docker container, it simply interacts with the \hyperref[subsec:led_app]{led application} to activate or deactivate the blinking of the led. The user simply presses a button built into the device to reverse the blinking state. A high-level view is shown in figure \ref{fig:use_case_led_button_apps}.
+This application is connected to the \hyperref[subsec:led_app]{led application} while retaining its independence. It is designed as a demonstration of local \acrshort{mqtt} communication. Also running in a Docker container, it simply interacts with the \hyperref[subsec:led_app]{led application} to activate or deactivate the blinking of the led. The user presses a button built into the device to reverse the blinking state. A high-level view is shown in figure \ref{fig:use_case_led_button_apps}.
 
 \subsection{Corrupt application}
 A corrupted application is also developed to examine the behaviour of the device with \gls{aws} services. The approach is to run a simple Docker application by deliberately providing an incorrect environment for launching the container.

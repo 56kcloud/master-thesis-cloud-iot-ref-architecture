@@ -1,0 +1,67 @@
+<mxfile host="Electron" modified="2024-01-25T13:36:40.008Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.2 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="xtgCnyIL40vxieQvrU6K" version="22.0.2" type="device">
+  <diagram name="Page-1" id="sx5xRd1YteaVBq6_YdTI">
+    <mxGraphModel dx="1036" dy="606" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-2" value="Last Deployed State" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="120" y="210" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-3" value="CLI and Engine" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="120" y="280" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="120" y="360" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-5" value="" style="endArrow=block;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endFill=1;fillColor=#0050ef;strokeColor=#001DBC;" parent="1" target="TU-ZWJYUKrTYj44AZK22-3" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="180" y="360" as="sourcePoint" />
+            <mxPoint x="230" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-6" value="Language host" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="120" y="400" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-7" value="main.py" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;strokeColor=default;fillColor=none;fontColor=#333333;" parent="1" vertex="1">
+          <mxGeometry x="145" y="370" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-8" value="" style="endArrow=block;html=1;rounded=0;entryX=0.583;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;endFill=1;" parent="1" target="TU-ZWJYUKrTYj44AZK22-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="190" y="280" as="sourcePoint" />
+            <mxPoint x="190" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-9" value="" style="endArrow=block;html=1;rounded=0;entryX=0.583;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;endFill=1;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="170" y="240" as="sourcePoint" />
+            <mxPoint x="170" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-10" value="AWS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="380" y="285" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-13" value="Cloud provider" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="365" y="250" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-14" value="" style="endArrow=block;html=1;rounded=0;endFill=1;fillColor=#d80073;strokeColor=#A50040;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" target="TU-ZWJYUKrTYj44AZK22-10" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="240" y="300" as="sourcePoint" />
+            <mxPoint x="300" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-17" value="Create, Update, Delete" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#a50040;" parent="1" vertex="1">
+          <mxGeometry x="240" y="280" width="125" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-18" value="new Resource()" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#001dbc;" parent="1" vertex="1">
+          <mxGeometry x="180" y="330" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="TU-ZWJYUKrTYj44AZK22-19" value="write new state" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="190" y="250" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="P6KfZS51FF1iGuZa2Iq3-1" value="" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" vertex="1" parent="1">
+          <mxGeometry x="160" y="170" width="40" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
