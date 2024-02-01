@@ -47,7 +47,7 @@ This \gls{cloud_infrastructure} part is implemented in a specific folder as foll
 \end{center}
 The main configuration file for the Pulumi tool, \textit{Pulumi.yaml}, includes crucial information such as the name of the stack and the programming language used, in this case Python.
 
-This implementation aims to facilitate the deployment of two distinct infrastructures, namely the development environment and the production environment. Therefore, two additional configuration files, \textit{Pulumi.dev.yaml} and \textit{Pulumi.prod.yaml}, are present to differentiate these two environments. \textit{Pulumi.dev.yaml} contains parameters such as the development account ID and the deployment region, while \textit{Pulumi.prod.yaml} includes the same parameters with production-specific values. The identifiers of the \gls{aws} accounts must be different.
+This implementation aims to facilitate the deployment of two distinct infrastructures, namely the development environment and the production environment. Therefore, two additional configuration files, \textit{Pulumi.dev.yaml} and \textit{Pulumi.prod.yaml}, are present to differentiate these two environments. \textit{Pulumi.dev.yaml} contains parameters such as the \gls{aws} development account ID and the deployment region, while \textit{Pulumi.prod.yaml} includes the same parameters with production-specific values. The identifiers of the \gls{aws} accounts must be different.
 
 The Python files \textit{main.py} and \textit{iam.py} detail the description of the resources to be deployed. \textit{iam.py} focuses on IAM roles and policies, while \textit{main.py} mainly covers resources related to \acrshort{iot} and other resources.
 
@@ -67,8 +67,81 @@ In this implementation, \gls{aws} \acrshort{iot} Greengrass Core software is dep
 A component must be installed. \textit{Greengrass nucleus} (aws.greengrass.Nucleus) is a mandatory component and the minimum requirement for running \gls{aws} \acrshort{iot} Greengrass Core software on a device. It is configurable to customize and update the \gls{aws} \acrshort{iot} Greengrass Core software \acrlong{ota}.
 
 \subsubsection{Communication}
-In this project, components running on an embedded system use the \gls{aws} \acrshort{iot} Greengrass Core \acrfull{ipc} library, available in the \gls{aws} \acrshort{iot} Device SDK, to exchange data with the \gls{aws} \acrshort{iot} Greengrass nucleus and other Greengrass components. The \acrshort{ipc} interface supports the \acrlong{mqtt} communication protocol.
+In this project, components running on an embedded system use the \gls{aws} \acrshort{iot} Greengrass Core \acrfull{ipc} library, available in the \gls{aws} \acrshort{iot} Device SDK, to exchange data with the \gls{aws} \acrshort{iot} Greengrass nucleus and other Greengrass components. The \acrshort{ipc} interface supports the \acrlong{mqtt} communication protocol. \acrshort{mqtt} offers lightweight, asynchronous communication.
 
 Publish/subscribe messaging allows messages to be sent and received in topics. Components can publish messages in topics to communicate with other components, and those who have subscribed to the topic can act on messages received. In this case, the communication is local to the \acrshort{iot} device.
 
 The \acrshort{ipc} interface also facilitates the sending and receiving of \acrshort{mqtt} messages between \gls{aws} \acrshort{iot} Greengrass and \gls{aws} \acrshort{iot} Core. Components can publish messages to \gls{aws} \acrshort{iot} Core and subscribe to topics to react to \acrshort{mqtt} messages from other sources.
+
+\subsubsection{\acrshort{ota} update}
+All devices with \gls{aws} \acrshort{iot} Greengrass Core software can obtain \acrshort{ota} updates via \acrshort{mqtt}.
+
+\textbf{\gls{aws} \acrshort{iot} Greengrass Core software update}\\
+This functionality is built into the \gls{aws} \acrshort{iot}Greengrass Core software. It is made possible by the \textit{Greengrass nucleus} component and other optional components. The following information is taken from the \gls{aws} documentation \cite{ota_aws_iot}.
+
+A few prerequisites must be met before an update can be carried out. Firstly, the Greengrass device must be connected to the \gls{cloud} \gls{aws} in order to receive the deployment. It must be properly configured with certificates and authentication keys to interact with both the \gls{aws} \acrshort{iot} Core and \gls{aws} \acrshort{iot} Greengrass. Finally, the \gls{aws} \acrshort{iot} Greengrass Core software must be configured and run as a system service.
+
+There are a few things to bear in mind when upgrading. The Greengrass nucleus stops. This stops all the other components present. When the nucleus component is shut down, the device's connection to \gls{aws} is lost.
+
+The following table summarises the behaviour of Greengrass updates :
+
+\begin{tabularx}{1\textwidth} { 
+    | >{\raggedright\arraybackslash}X 
+    | >{\raggedright\arraybackslash}X 
+    | >{\raggedright\arraybackslash}X | }
+    \hline
+    \rowcolor{lightgray}
+    Action              & Deployment configuration  & Nucleus update behavior \\ \hline
+    \multirow{2}{\linewidth}{Add new devices to a thing group targeted by an existing deployment without revising the deployment.}
+    & The deployment does not directly include Greengrass nucleus.
+    
+    The deployment directly includes at least one AWS-provided component, or includes a custom component that depends on an AWS-provided component or on the Greengrass nucleus.
+    & On new devices, installs the latest patch version of nucleus that meets all component dependency requirements.
+
+    On existing devices, does not update the installed version of the nucleus. \\ \cline{2-3}
+    & The deployment directly includes a specific version of the Greengrass nucleus.
+    & On new devices, installs the specified nucleus version.
+
+    On existing devices, does not update the installed version of the nucleus. \\ \hline
+    \multirow{2}{\linewidth}{Create a new deployment or revise an existing deployment.}
+    & The deployment does not directly include Greengrass nucleus.
+
+    The deployment directly includes at least one AWS-provided component, or includes a custom component that depends on an AWS-provided component or on the Greengrass nucleus.
+    & On all targeted devices, installs the latest patch version of the nucleus that meets all component dependency requirements, including on any new devices that you add to the targeted thing group. \\ \cline{2-3} 
+    & The deployment directly includes a specific version of the Greengrass nucleus.
+    & On all targeted devices, installs the specified nucleus version, including any new devices that you add to the targeted thing group. \\ \hline
+\end{tabularx}
+
+In this reference architecture, the version of \textit{Greengrass nucleus} is not specified. However, there is one component provided by \gls{aws} (\textit{aws.greengrass.Cli}) and custom components which depend on several components provided by \gls{aws}.
+
+\textbf{Greengrass components update}\\
+For custom or public \gls{aws} components, the \gls{aws} \acrshort{iot} Greengrass Deployment service enables OTA updates.
+
+The prerequisites for an update are the same as for the software update. When an update is deployed, only components with a new version are updated. These components will then be stopped and restarted automatically after being updated. If a deployment error occurs, a rollback is performed and the components resume their course with the old version.
+
+The following table explains two main actions:
+
+\begin{tabularx}{1\textwidth} { 
+    | >{\raggedright\arraybackslash}X
+    | >{\raggedright\arraybackslash}X | }
+    \hline
+    \rowcolor{lightgray}
+    Action              & Components behaviour \\ \hline
+    Add new devices to a group of devices targeted by an existing deployment without modifying the deployment.
+    & All the components and dependencies present in the deployment are automatically deployed with their latest version on the new devices.
+    
+    On existing devices, nothing happens.\\
+    \hline
+    Create a new version of one or more Greengrass components.
+    & Only components with a new version will be deployed on all devices in the group of devices targeted for deployment. \\
+    \hline
+\end{tabularx}
+
+\subsubsection{Fleet \gls{provisioning}}
+With \gls{aws} \acrshort{iot} fleet \gls{provisioning}, it is possible to securely set up \gls{aws} \acrshort{iot} to generate and distribute X.509 device certificates and private keys to each device when they first connect to \gls{aws} \acrshort{iot} \cite{aws_iot_greengrass_fleet}. These client certificates, signed by the Amazon Root Certificate Authority, are provided by \gls{aws} \acrshort{iot}. It is very flexible to define specific device groups, device types and permissions for Greengrass Core devices to be provisioned using fleet \gls{provisioning}. A \gls{provisioning} template is used to describe the \gls{provisioning} process for each device, detailing the device, policy and certificate resources to be created during \gls{provisioning}. This template is created from Pulumi.
+
+\gls{aws} \acrshort{iot} Greengrass offers a dedicated \gls{aws} \acrshort{iot} fleet \gls{provisioning} plugin (\textit{aws.greengrass .FleetProvisioningByClaim}), which facilitates the installation of \gls{aws} \acrshort{iot} Greengrass Core software using the resources created by \gls{aws} \acrshort{iot} fleet \gls{provisioning}. This plugin uses claim-based \gls{provisioning}, where devices use a \gls{provisioning} claim certificate and private key to obtain a unique X.509 device certificate, along with a private key, enabling regular operations. The claim certificate and private key are integrated as soon as the Linux \acrshort{os} image is created, enabling devices to be activated later when they are connected. The same claim certificate and private key can be used for multiple devices.
+
+To deploy \gls{aws} \acrshort{iot} Greengrass Core software with \gls{aws} \acrshort{iot} fleet provisioning, configuration of resources in the \gls{aws} account is required. These resources include a provisioning template, a claim certificate and a token exchange IAM role. Once these elements have been created from Pulumi, apart from the certificate from the \gls{aws} \acrshort{cli}, they can be reused to provision several embedded systems within the same fleet. The token exchange IAM role authorises calls to \gls{aws} services from the \acrshort{iot} device.
+
+In this architecture, devices are registered by their serial number to ensure that each one has a unique name.
