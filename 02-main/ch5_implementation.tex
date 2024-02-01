@@ -62,7 +62,7 @@ Integrating embedded systems with the \gls{aws} ecosystem is crucial to reaping 
 \begin{quote}
     \textit{\gls{aws} \acrshort{iot} Greengrass is an open source \acrfull{iot} edge runtime and \gls{cloud} service that helps you build, deploy and manage \acrshort{iot} applications on your devices. You can use \gls{aws} \acrshort{iot} Greengrass to build software that enables your devices to act locally on the data that they generate, run predictions based on machine learning models, and filter and aggregate device data. \gls{aws} \acrshort{iot} Greengrass enables your devices to collect and analyze data closer to where that data is generated, react autonomously to local events, and communicate securely with other devices on the local network. Greengrass devices can also communicate securely with \gls{aws} \acrshort{iot} Core and export \acrshort{iot} data to the \gls{aws} Cloud. You can use \gls{aws} \acrshort{iot} Greengrass to build edge applications using pre-built software modules, called components, that can connect your edge devices to \gls{aws} services or third-party services. You can also use \gls{aws} \acrshort{iot} Greengrass to package and run your software using Lambda functions, Docker containers, native operating system processes, or custom runtimes of your choice. \cite{aws_iot_greengrass}}\\
 \end{quote}
-In this implementation, \gls{aws} \acrshort{iot} Greengrass Core software is deployed on embedded systems, acting as an intelligent hub that manages interactions with the \gls{aws} \gls{cloud}. It adapts perfectly to Linux OS. Greengrass components, encapsulating the necessary code, dependencies and resources, are then deployed automatically using mechanisms such as \gls{aws} \acrshort{iot} Greengrass Deployment.
+In this implementation, \gls{aws} \acrshort{iot} Greengrass Core software is deployed on embedded systems, acting as an intelligent hub that manages interactions with the \gls{aws} \gls{cloud}. It adapts perfectly to Linux \acrshort{os}. Greengrass components, encapsulating the necessary code, dependencies and resources, are then deployed automatically using mechanisms such as \gls{aws} \acrshort{iot} Greengrass Deployment.
 
 A component must be installed. \textit{Greengrass nucleus} (aws.greengrass.Nucleus) is a mandatory component and the minimum requirement for running \gls{aws} \acrshort{iot} Greengrass Core software on a device. It is configurable to customize and update the \gls{aws} \acrshort{iot} Greengrass Core software \acrlong{ota}.
 
@@ -145,3 +145,31 @@ With \gls{aws} \acrshort{iot} fleet \gls{provisioning}, it is possible to secure
 To deploy \gls{aws} \acrshort{iot} Greengrass Core software with \gls{aws} \acrshort{iot} fleet provisioning, configuration of resources in the \gls{aws} account is required. These resources include a provisioning template, a claim certificate and a token exchange IAM role. Once these elements have been created from Pulumi, apart from the certificate from the \gls{aws} \acrshort{cli}, they can be reused to provision several embedded systems within the same fleet. The token exchange IAM role authorises calls to \gls{aws} services from the \acrshort{iot} device.
 
 In this architecture, devices are registered by their serial number to ensure that each one has a unique name.
+
+\subsubsection{\acrshort{os} image}
+To enable the devices to be provisioned to integrate automatically on their first boot, a Linux \acrshort{os} image is created specifically for this purpose. The base image used for this architecture is \textit{Raspberry Pi \acrshort{os} Lite} based on the Debian distribution. A directory dedicated to the creation of the image is present as follows:
+\begin{center}
+    \usemintedstyle{pastie}
+    \begin{minted}
+    [
+    fontsize=\scriptsize
+    ]{text}
+    os-image
+        ├── raspios-lite.json
+        ├── set_os.sh
+        ├── provision.sh
+        └── config.yaml
+    \end{minted}
+\end{center}
+Image creation is managed by Packer \cite{packer}, an open source tool for automating image creation. Packer follows a process defined in a configuration file \acrshort{json} (\textit{raspios-lite.json}).
+
+It works as follows :
+\begin{enumerate}
+    \item \textbf{Packer configuration} (raspios-lite.json) : The Packer configuration file describes all the steps required to create the image. It specifies the constructors (in this case, the Arm constructor), the actions to be performed, the base image sources and other parameters.
+    \item \textbf{Running Packer} : In this project, Packer runs in a Docker environment. When the container is launched, the tool starts the build process following the specified configuration.
+    \item \textbf{Packer builder ARM plugin} : A plugin \cite{packer_plugin} to the Packer tool is used to build images specific to the Arm architecture. It uses the Arm build model to create a custom image based on the specification.
+    \item \textbf{Actions} : The actions in the configuration file are carried out to configure the image. This may involve installing software, configuring system parameters, etc. In this case, some system parameters are configured using the \textit{set\_os.sh} script. The \gls{provisioning} script \textit{provision.sh} used to install the necessary software is saved in the image and configured to run the first time the operating system is booted. Finally, the claim certificate and its private key are saved in the image.
+    \item \textbf{Build complete} : Once all the build and configuration steps have been successfully completed, Packer creates a custom image in the specified format (.img in this case).
+\end{enumerate}
+
+The \gls{provisioning} file \textit{provision.sh} is a bash script. When it first runs on a device, it first retrieves the device's serial number, so that the device is registered in \gls{aws} \acrshort{iot} under that name. The script then installs the Docker Engine software, paving the way for future deployment of Greengrass components in containers. After this step, \gls{aws} \acrshort{iot} Greengrass Core is installed with the plugin specially dedicated to fleet \gls{provisioning}. Finally, the \gls{provisioning} command is executed using the \textit{config.yaml} configuration file, which contains various parameters such as the device serial number, as well as the paths to locate the claim certificate and private key.
