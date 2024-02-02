@@ -248,3 +248,87 @@ All workflows are implemented in a specific folder as follows :
 GitHub Actions integrates seamlessly with the \gls{aws} \gls{cloud}. It uses the \acrfull{oidc} credentials protocol to access resources when deploying or updating the \gls{cloud_infrastructure}. \acrshort{oidc} allows workflows to interact with \gls{aws} \gls{cloud} service provider resources without having to permanently store credentials as GitHub secrets. Before deploying the infrastructure, the \gls{aws} account configuration is adjusted to recognise the GitHub \acrshort{oidc} as a trusted federated identity. In addition, this identification is based on IAM roles. This limits the possible actions on resources to the minimum required. Everything must be configured before the \acrshort{ci}/\acrshort{cd} process is launched.
 
 To enable this connection to be used, \gls{aws} provides a pre-built action which is integrated into the flows (\textit{aws-actions/configure-aws-credentials}).
+
+\subsection{Infrastructure deployment}
+This initial flow is triggered each time a new modification is pushed into Git. Before deploying the \gls{cloud_infrastructure}, the decision was taken to generate a claim certificate and store it in a dedicated S3 bucket. This operation is carried out only once, ensuring that the same claim certificate is always preserved, even if the infrastructure is destroyed and redeployed at a later date. This ensures that devices ready to be provisioned can always do so using the same claim certificate.
+
+A second S3 bucket is specifically created to record the state of the infrastructure. Pulumi connects to it, orchestrating the deployment of the configured infrastructure, whether for the development or production environment.
+
+Successful completion of this first stage simultaneously triggers two other processes: provisioning configuration and testing of the developed applications. If deployment fails, the entire \acrshort{ci}/\acrshort{cd} process is interrupted.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{implementation/deploy_infra.pdf}
+    \captionof{figure}{Infrastructure deployment workflow}
+    \label{fig:deploy_infra}
+    \endgroup
+\end{center}
+
+\subsection{\Gls{provisioning} setup}
+This flow manages the preparation of configuration files for provisioning embedded systems, as well as checking devices that have already been provisioned. Two tasks are performed simultaneously. The first checks the serial numbers of devices in a dedicated list. If previously provisioned devices are no longer in the list, they are removed from the \gls{aws} \gls{cloud}. Authorised devices are reassigned to the new infrastructure and their unique certificate is reassociated with the \gls{aws} \acrshort{iot} policy for actions in the \gls{cloud}.
+
+The second task, related to configuration, retrieves the \acrshort{iot} endpoints for future communications between the devices and \gls{aws} \acrshort{iot}. Next, the parameters are saved in a configuration file required for provisioning. This file is stored, along with the list of authorised devices, in the same S3 bucket as the claim certificate.
+
+Only if this flow is successful will the creation of the Linux image begin.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.9\columnwidth]{implementation/setup_provisioning.pdf}
+    \captionof{figure}{\Gls{provisioning} setup workfow}
+    \label{fig:setup_provisioning}
+    \endgroup
+\end{center}
+
+\subsection{\acrshort{os} image building}
+This process begins by retrieving the configuration file and the claim certificate, along with its associated private key, which have previously been saved in the S3 compartment. The image is then created using the Packer tool and its plugin. The image is created in a Docker container preconfigured with the necessary environment. Once the image has been generated, it is saved in its corresponding S3 compartment.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.7\columnwidth]{implementation/build_os.pdf}
+    \captionof{figure}{\acrshort{os} image building workflow}
+    \label{fig:build_os}
+    \endgroup
+\end{center}
+
+\subsection{Applications testing}
+Simultaneously with the two previous workflows, this stage aims to test all the applications developed. It runs three tests concurrently. The first tests the linting of each application, helping to improve the quality of the code. The second performs static security tests for each application. Finally, unit tests are carried out using test code developed in parallel with the applications. The tools used in this task will depend on the programming language used.
+
+If all the tests have been passed, the applications can be built.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.6\columnwidth]{implementation/test_apps.pdf}
+    \captionof{figure}{Applications testing workflow}
+    \label{fig:test_apps}
+    \endgroup
+\end{center}
+
+\subsection{Applications building}
+This process is divided into two stages. The first involves containerising applications using Docker, with this operation applied only to new applications or those that have undergone modifications. The resulting images are then stored in the dedicated Amazon Elastic Container Registry (ECR) service.
+
+The second part of the process focuses on creating a Greengrass component for each application. When a component is updated, a new version is created. However, only applications that have undergone modifications will see a new version of their component generated. It is also possible for a component's parameters to change, causing it to be updated. Each time a new version of a component is released, it is published in \gls{aws} \acrshort{iot} Greengrass, orchestrated by the \gls{aws} Greengrass Development Kit (GDK).
+
+Once this workflow has been successfully completed, the Greengrass components are deployed.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.7\columnwidth]{implementation/build_apps.pdf}
+    \captionof{figure}{Applications building workflow}
+    \label{fig:build_apps}
+    \endgroup
+\end{center}
+
+\subsection{Applications deployment}
+This workflow supports the deployment of Greengrass components on a group of devices. It does this using the \gls{aws} \acrshort{cli}. It doesn't matter whether the components have been updated or not, deployment takes place either way. \gls{aws} \acrshort{iot} Greengrass Deployment is smart enough to see if a new version of a component has been released. If this is the case, only the component with the new version will be deployed in the device group.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.4\columnwidth]{implementation/deploy_apps.pdf}
+    \captionof{figure}{Applications deployment workflow}
+    \label{fig:deploy_apps}
+    \endgroup
+\end{center}
+
+\subsection{Infrastructure destruction}
+This last workflow is optional and has the task of dismantling the \gls{aws} \gls{cloud_infrastructure}. To enable Pulumi to delete the S3 bucket containing the \acrshort{os} image, it must first be emptied. The \acrshort{os} image is then deleted. The bucket containing the configuration file and the list of authorised devices is emptied, with the exception of the claim certificate and its private key. Embedded systems integrated into the \gls{aws} \gls{cloud} retain their unique certificate in \gls{aws}, but lose their \gls{aws} \acrshort{iot} policy, dissociating them from any action. Finally, Pulumi connects to the S3 bucket containing the stack to completely remove the infrastructure. Once all the operations have been completed, the S3 bucket containing the stack is also deleted.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{implementation/destroy_infra.pdf}
+    \captionof{figure}{Infrastructure destruction workflow}
+    \label{fig:destroy_infra}
+    \endgroup
+\end{center}
