@@ -206,3 +206,45 @@ When it comes to data at rest, \gls{aws} \acrshort{iot} Greengrass adopts differ
     \item \textbf{Data at rest in the \gls{aws} \gls{cloud}} : Customer data stored in the \gls{aws} \gls{cloud} is encrypted by the \gls{aws} \acrshort{iot} Greengrass service using \gls{aws} KMS keys under its management.
     \item \textbf{Data at rest on the Greengrass device} : Data at rest on the device is protected by Unix file permissions and full disk encryption (if enabled, not enabled in this implementation). The user is responsible for securing the file system and the device.
 \end{itemize}
+
+% -----------------------------------------------------------------------------
+\section{\texorpdfstring{\acrshort{ci}/\acrshort{cd}}{} pipeline}
+A \acrshort{ci}/\acrshort{cd} process derived from the \acrshort{devops} methodology has been put in place. It automates several workflows by integrating all the tools and software already described. The entire reference architecture has been developed in a public GitHub repository \cite{aws_iot_reference_architecture}.
+
+% -- Your text goes here --
+\subsection{GitHub Actions}
+GitHub Actions is the \acrfull{ci} and \acrfull{cd} service integrated directly into the GitHub platform and used in this project. It automates various aspects of the software development lifecycle, from building code to deploying it.
+
+GitHub Actions works like this :
+\begin{enumerate}
+    \item \textbf{Definition of workflows} : These describe the specific steps to be carried out during particular events, such as code validations, new version releases, etc. Several workflows can be run sequentially or in parallel.
+    \item \textbf{Triggering workflows} : These are triggered automatically in response to specific events defined by the developers. For example, a workflow can be triggered every time a new branch is created.
+    \item \textbf{Execution of steps} : Each workflow is made up of steps (jobs) that are executed sequentially or in parallel. These steps can include predefined actions, custom scripts, tests, deployments, etc.
+    \item \textbf{Runtime environments} : GitHub Actions provides runtime environments managed by GitHub. In this context, the Ubuntu-based Linux environment is used.
+    \item \textbf{Notifications and reports} : The results of each stage of the workflow are recorded and presented in the GitHub interface. Developers can receive notifications of successful or unsuccessful execution of the workflow.
+    \item \textbf{Integration with other services} : GitHub Actions can be integrated with other services and tools, such as cloud deployment services, notification services, secret management tools, etc.
+    \item \textbf{Actions ecosystem} : GitHub Actions offers a rich ecosystem of pre-built actions that developers can use in their workflows. These actions are reusable units of functionality (tests, deployments, notifications, etc.).
+\end{enumerate}
+
+All workflows are implemented in a specific folder as follows :
+\begin{center}
+    \usemintedstyle{pastie}
+    \begin{minted}
+    [
+    fontsize=\scriptsize
+    ]{text}
+    .github/workflows
+        ├── deploy-infra.yml
+        ├── setup-provisioning.yml
+        ├── build-image.yml
+        ├── test-apps.yml
+        ├── build-apps.yml
+        ├── deploy-apps.yml
+        └── destroy-infra.yml
+    \end{minted}
+\end{center}
+
+\subsection{Access to \gls{aws} resources}
+GitHub Actions integrates seamlessly with the \gls{aws} \gls{cloud}. It uses the \acrfull{oidc} credentials protocol to access resources when deploying or updating the \gls{cloud_infrastructure}. \acrshort{oidc} allows workflows to interact with \gls{aws} \gls{cloud} service provider resources without having to permanently store credentials as GitHub secrets. Before deploying the infrastructure, the \gls{aws} account configuration is adjusted to recognise the GitHub \acrshort{oidc} as a trusted federated identity. In addition, this identification is based on IAM roles. This limits the possible actions on resources to the minimum required. Everything must be configured before the \acrshort{ci}/\acrshort{cd} process is launched.
+
+To enable this connection to be used, \gls{aws} provides a pre-built action which is integrated into the flows (\textit{aws-actions/configure-aws-credentials}).
