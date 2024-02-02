@@ -173,3 +173,36 @@ It works as follows :
 \end{enumerate}
 
 The \gls{provisioning} file \textit{provision.sh} is a bash script. When it first runs on a device, it first retrieves the device's serial number, so that the device is registered in \gls{aws} \acrshort{iot} under that name. The script then installs the Docker Engine software, paving the way for future deployment of Greengrass components in containers. After this step, \gls{aws} \acrshort{iot} Greengrass Core is installed with the plugin specially dedicated to fleet \gls{provisioning}. Finally, the \gls{provisioning} command is executed using the \textit{config.yaml} configuration file, which contains various parameters such as the device serial number, as well as the paths to locate the claim certificate and private key.
+
+\subsection{Security}
+At \gls{aws}, security is a top priority \cite{aws_iot_greengrass_security}. Security is a shared responsibility between \gls{aws} and the developer :
+\begin{itemize}
+    \item \textbf{Security of the \gls{cloud}} : \gls{aws} is responsible for protecting the infrastructure that runs \gls{aws} services in the \gls{aws} \gls{cloud}.
+    \item \textbf{Security in the \gls{cloud}} : The developer's responsibility is determined by the \gls{aws} service that he uses.
+\end{itemize}
+When using \gls{aws} \acrshort{iot} Greengrass, the developer is also responsible for securing these devices, the connection to the local network and the private keys.
+
+\subsubsection{Authentication}
+Greengrass devices use X.509 certificates for authentication. X.509 certificates are digital certificates that adopt the X.509 public key infrastructure standard to bind a public key to the identity specified in the certificate. These X.509 certificates are issued by a trusted entity known as a \acrfull{ca}. The \acrshort{ca} holds one or more specific certificates, called \acrshort{ca} certificates, which it uses to issue X.509 certificates. Only this \acrshort{ca} has the privilege of accessing the certificates. In this process, the authority is Amazon Root \acrlong{ca}. When \gls{provisioning} a device, the fleet \gls{provisioning} plugin requests a unique client certificate from this authority. \cite{aws_iot_greengrass_security}
+
+Only devices authorised to be provisioned will receive a certificate. In this implementation, a list allowing the serial numbers of authorised devices to be inserted has been created in a dedicated file (\textit{allowlist.txt}). When the \gls{provisioning} plugin attempts to provision a device, it will first trigger a Lambda function which will check the list to see if the device is authorised. If so, it will receive its unique certificate. If not, it will not receive it and will not be provisioned.
+
+Greengrass devices store certificates in the default Greengrass root folder (\textit{/v2/greengrass/}).
+
+\subsubsection{Authorization}
+Greengrass devices rely on \gls{aws} \acrshort{iot} policies for authorization. These \gls{aws} \acrshort{iot} policies determine the scope of operations permitted for \gls{aws} \acrshort{iot} devices. They specify, in detail, permissions or denials of access to \gls{aws} \acrshort{iot} Core and \gls{aws} \acrshort{iot} Greengrass data plane operations, including actions such as publishing \acrshort{mqtt} messages. In this architecture, an \gls{aws} \acrshort{iot} policy is created directly from Pulumi. \cite{aws_iot_greengrass_security}
+
+\subsubsection{Data protection}
+Greengrass devices frequently collect data for transmission to \gls{aws} services for further processing. \gls{aws} \acrshort{iot} Greengrass uses encryption to protect data in transit (via the internet or local network) and at rest (stored in the \gls{aws} \gls{cloud}). \cite{aws_iot_greengrass_security}
+
+\gls{aws} \acrshort{iot} Greengrass offers two distinct modes of communication for data in transit :
+\begin{itemize}
+    \item \textbf{Data in transit over the internet} : Communication over the internet between a device and \gls{aws} \acrshort{iot} is encrypted using the \acrfull{tls} protocol. \acrshort{tls} is a security protocol that guarantees the confidentiality and integrity of data when it is exchanged over a network. All data sent to the \gls{aws} \gls{cloud} therefore uses the \acrshort{mqtt} protocol based on \acrshort{tls}.
+    \item \textbf{Data on the device} : Communication between components on the Greengrass device is not encrypted, as the data does not leave the device.
+\end{itemize}
+
+When it comes to data at rest, \gls{aws} \acrshort{iot} Greengrass adopts different approaches :
+\begin{itemize}
+    \item \textbf{Data at rest in the \gls{aws} \gls{cloud}} : Customer data stored in the \gls{aws} \gls{cloud} is encrypted by the \gls{aws} \acrshort{iot} Greengrass service using \gls{aws} KMS keys under its management.
+    \item \textbf{Data at rest on the Greengrass device} : Data at rest on the device is protected by Unix file permissions and full disk encryption (if enabled, not enabled in this implementation). The user is responsible for securing the file system and the device.
+\end{itemize}
