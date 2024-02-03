@@ -95,7 +95,7 @@ The following table summarises the behaviour of Greengrass updates :
     \multirow{2}{\linewidth}{Add new devices to a thing group targeted by an existing deployment without revising the deployment.}
     & The deployment does not directly include Greengrass nucleus.
     
-    The deployment directly includes at least one AWS-provided component, or includes a custom component that depends on an AWS-provided component or on the Greengrass nucleus.
+    The deployment directly includes at least one \gls{aws}-provided component, or includes a custom component that depends on an \gls{aws}-provided component or on the Greengrass nucleus.
     & On new devices, installs the latest patch version of nucleus that meets all component dependency requirements.
 
     On existing devices, does not update the installed version of the nucleus. \\ \cline{2-3}
@@ -106,7 +106,7 @@ The following table summarises the behaviour of Greengrass updates :
     \multirow{2}{\linewidth}{Create a new deployment or revise an existing deployment.}
     & The deployment does not directly include Greengrass nucleus.
 
-    The deployment directly includes at least one AWS-provided component, or includes a custom component that depends on an AWS-provided component or on the Greengrass nucleus.
+    The deployment directly includes at least one \gls{aws}-provided component, or includes a custom component that depends on an \gls{aws}-provided component or on the Greengrass nucleus.
     & On all targeted devices, installs the latest patch version of the nucleus that meets all component dependency requirements, including on any new devices that you add to the targeted thing group. \\ \cline{2-3} 
     & The deployment directly includes a specific version of the Greengrass nucleus.
     & On all targeted devices, installs the specified nucleus version, including any new devices that you add to the targeted thing group. \\ \hline
@@ -300,7 +300,7 @@ If all the tests have been passed, the applications can be built.
 \end{center}
 
 \subsection{Applications building}
-This process is divided into two stages. The first involves containerising applications using Docker, with this operation applied only to new applications or those that have undergone modifications. The resulting images are then stored in the dedicated Amazon Elastic Container Registry (ECR) service.
+This process is divided into two stages. The first involves containerising applications using Docker, with this operation applied only to new applications or those that have undergone modifications. The resulting images are then stored in the dedicated Amazon \acrshort{ecr} service.
 
 The second part of the process focuses on creating a Greengrass component for each application. When a component is updated, a new version is created. However, only applications that have undergone modifications will see a new version of their component generated. It is also possible for a component's parameters to change, causing it to be updated. Each time a new version of a component is released, it is published in \gls{aws} \acrshort{iot} Greengrass, orchestrated by the \gls{aws} Greengrass Development Kit (GDK).
 
@@ -331,4 +331,101 @@ This last workflow is optional and has the task of dismantling the \gls{aws} \gl
     \captionof{figure}{Infrastructure destruction workflow}
     \label{fig:destroy_infra}
     \endgroup
+\end{center}
+
+% ------------------------------------------------------------------------------
+\section{Applications}
+
+% -- Your text goes here --
+\subsection{Greengrass components}
+Greengrass components are software modules that are deployed on devices containing the \gls{aws} \acrshort{iot} Greengrass Core program. Components can be applications, runtime installers, libraries, or any code that is executable on a device. Components may depend on other components. For example, one component installs Python and other components depend on it to run Python applications. When components are deployed on a fleet of devices, \gls{aws} \acrshort{iot} Greengrass deploys only the software modules that the devices need. \cite{aws_iot_greengrass_components}
+
+Here are some key points about Greengrass components :
+\begin{itemize}
+    \item \textbf{Greengrass component definition} : A component can be defined as a combination of code (for example, a Python application), software dependencies and system resources. These may include libraries, configuration files, executables, etc.
+    \item \textbf{Component management} : \gls{aws} \acrshort{iot} Greengrass enables centralised management of components. Components can be created, published and managed in \gls{aws} \acrshort{iot} Greengrass and deployed to groups of Greengrass devices.
+    \item \textbf{Types of components} : Two types of component are used
+    \begin{itemize}
+        \item Nucleus (aws.greengrass.nucleus): The Greengrass nucleus is the mandatory installed component that provides the minimum functionality for the operation of the \gls{aws} \acrshort{iot} Greengrass Core software.
+        \item Generic (aws.greengrass.generic): The Greengrass nucleus executes lifecycle scripts for a generic component. This type is the default for custom components.
+    \end{itemize}
+    \item \textbf{Deployment} : Components are deployed on groups of Greengrass devices to run device-level applications. Deployments are orchestrated and managed from the \gls{aws} \acrshort{iot} Greengrass Deployment service.
+    \item \textbf{Versioning} : Components can be versioned, enabling different versions of the software to be managed and updates to be rolled out in a controlled manner.
+\end{itemize}
+
+In this project, a component is defined in a folder as follows :
+\begin{center}
+    \usemintedstyle{pastie}
+    \begin{minted}
+    [
+    fontsize=\scriptsize
+    ]{text}
+    component_1
+        ├── gdk-config.json
+        └── recipe.yaml
+    \end{minted}
+\end{center}
+The \textit{gdk-config.json} file is specific to the \gls{aws} GDK tool, used to generate and publish a component to \gls{aws} \acrshort{iot} Greengrass. It only includes parameters such as the component name, for example.
+
+The \textit{recipe.yaml} file describes the component, its required dependencies, its lifecycle and the location of the executable. An example of this file is shown below.
+\begin{center}
+    \usemintedstyle{pastie}
+    \begin{minted}
+    [
+    fontsize=\scriptsize
+    ]{yaml}
+    RecipeFormatVersion: "2020-01-25"
+    ComponentName: COMPONENT_NAME
+    ComponentVersion: COMPONENT_VERSION
+    ComponentDescription: COMPONENT_DESCRIPTION
+    ComponentPublisher: AUTHOR
+    ComponentConfiguration:
+        DefaultConfiguration:
+            var1: 1
+            var2: "frequency"
+            accessControl:
+                aws.greengrass.ipc.mqttproxy:
+                    com.app:mqttproxy:1:
+                        policyDescription: "Allows access to subscribe to input topics from AWS IoT."
+                        operations:
+                            - "aws.greengrass#SubscribeToIoTCore"
+                        resources:
+                            - "topic1"
+                    com.app:mqttproxy:2:
+                        policyDescription: "Allows access to publish to output topics to AWS IoT."
+                        operations:
+                            - "aws.greengrass#PublishToIoTCore"
+                        resources:
+                            - "topic2"
+    ComponentDependencies:
+        aws.greengrass.DockerApplicationManager
+    Manifests:
+    - Platform:
+        os: linux
+        architecture: aarch64
+      Lifecycle:
+        run: 
+            RequiresPrivilege: true
+            Script: docker run DOCKER_IMAGE@DIGEST
+      Artifacts:
+        - URI: "docker:AWS_ACCOUNT_ID.dkr.ecr.AWS_REGION.amazonaws.com/DOCKER_IMAGE"
+    \end{minted}
+\end{center}
+Starting at the top of the example, information about the component is presented. Next, the configuration (\textit{ComponentConfiguration}) is detailed, allowing the creation of variables and the configuration of access controls (\textit{accessControl}). The latter is used to define authorised operations, typically using the \acrshort{mqtt} protocol, such as the topics to which the component can publish or subscribe. Next, the dependent components are specified (\textit{ComponentDependencies}). Finally, the lifecycle (\textit{Lifecycle}) is detailed, along with the specification of the environment platform. In this example, a Docker application is launched and its image has been retrieved from the Amazon \acrshort{ecr} service via its URI.
+
+\subsection{Containerization}
+The Python applications developed in this project are run in Docker containers. The creation of the application image requires the use of a Dockerfile. This specifies the architecture of the embedded system on which the container is to run, as well as the base image used. Finally, the Dockerfile copies the directory containing the application into its environment, then simply executes a bash script. This bash script installs the necessary Python libraries and launches the Python application.
+\begin{center}
+    \usemintedstyle{pastie}
+    \begin{minted}
+    [
+    fontsize=\scriptsize
+    ]{text}
+    docker_app_1
+        ├── app_1
+        ├   ├── start.sh
+        ├   ├── requirements.txt
+        ├   └── main.py
+        └── Dockerfile
+    \end{minted}
 \end{center}
