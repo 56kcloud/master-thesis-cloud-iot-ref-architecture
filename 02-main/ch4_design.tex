@@ -82,7 +82,7 @@ The application used to update \acrlong{os} features is essential to the referen
 This application does not run in a Docker container, but directly in the Greengrass component. The operation of the application must be kept simple. An activity diagram in figure \ref{fig:activity_diagram_OS_update} shows this.
 \begin{center}
     \begingroup
-    \includegraphics[width=.25\columnwidth]{design/activity_diagram_OS_update.pdf}
+    \includegraphics[width=.2\columnwidth]{design/activity_diagram_OS_update.pdf}
     \captionof{figure}{\acrshort{os} update application activity diagram}
     \label{fig:activity_diagram_OS_update}
     \endgroup
@@ -95,12 +95,19 @@ On embedded systems communicating with \gls{aws}, unique certificates are used t
 This application runs in a Docker container. An activity diagram illustrates its behaviour in figure \ref{fig:activity_diagram_certificate_rotator}.
 \begin{center}
     \begingroup
-    \includegraphics[width=.6\columnwidth]{design/activity_diagram_certificate_rotator.pdf}
+    \includegraphics[width=.5\columnwidth]{design/activity_diagram_certificate_rotator.pdf}
     \captionof{figure}{Certificate rotator application activity diagram}
     \label{fig:activity_diagram_certificate_rotator}
     \endgroup
 \end{center}
-The general idea is that it is alerted by the \acrshort{iot} Device Defender service when a certificate change is required. The application then creates a new private key and makes a certificate creation request (\acrfull{csr}) to the Amazon root certificate authority. A signed certificate is returned. This will replace the old certificate and the old private key with the new one. In order for the \gls{aws} \acrshort{iot} Greengrass Core service to take the new certificate into account during future communications, this service must be restarted on the device.
+The general idea is that it is alerted by the \acrshort{iot} Device Defender service when a certificate change is required. The application then creates a new private key and makes a certificate creation request (\acrfull{csr}) to the Amazon root certificate authority. A signed certificate is returned. This will replace the old certificate and the old private key with the new one. In order for the \gls{aws} \acrshort{iot} Greengrass Core service to take the new certificate into account during future communications, this service must be restarted on the device. An overview of the certificate rotation is shown in figure \ref{fig:CertificateRotation_Overview}. It shows the links between the \gls{aws} services and the application on the \acrshort{iot} device.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{design/CertificateRotation_Overview.png}
+    \captionof{figure}{Certificate rotation overview \cite{aws_iot_certificate_rotator}}
+    \label{fig:CertificateRotation_Overview}
+    \endgroup
+\end{center}
 
 \subsection{Led application}
 \label{subsec:led_app}

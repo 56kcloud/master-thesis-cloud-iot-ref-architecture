@@ -429,3 +429,75 @@ The Python applications developed in this project are run in Docker containers. 
         └── Dockerfile
     \end{minted}
 \end{center}
+
+\subsection{Certificate rotator application}
+This application, which is essential to ensure that \acrshort{iot} devices work properly, has been implemented in Python. Figure \ref{fig:class_diagram_certificate_rotator_app} illustrates the associated class diagram.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{implementation/class_diagram_certificate_rotator_app.pdf}
+    \captionof{figure}{Certificate rotation application class diagram}
+    \label{fig:class_diagram_certificate_rotator_app}
+    \endgroup
+\end{center}
+Below is a description of the various classes :
+\begin{itemize}
+    \item \textit{CertificateRotator} : Main class that includes the program's main loop. It generates \acrshort{csr} and private keys. It also changes the old certificates to the new ones received.
+    \item \textit{Publish} : Class that publishes \acrshort{mqtt} messages to \gls{aws} \acrshort{iot}.
+    \item \textit{Subscribe} : Class that receives \acrshort{mqtt} messages from \gls{aws} \acrshort{iot}.
+\end{itemize}
+A sequence diagram illustrating how the application works is available in figure \ref{fig:sequence_diagram_certificate_rotation_app}.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{implementation/sequence_diagram_certificate_rotation_app.pdf}
+    \captionof{figure}{Certificate rotation application sequence diagram}
+    \label{fig:sequence_diagram_certificate_rotation_app}
+    \endgroup
+\end{center}
+The sequence diagram \ref{fig:sequence_diagram_certificate_rotation_app} highlights the two main actions of the application : the \acrfull{csr} and the certificate replacement. When the \acrshort{mqtt} broker integrated into \gls{aws} \acrshort{iot} Core transmits a message relating to the creation of the \acrshort{csr}, the corresponding method is triggered. This method then sends the \acrshort{csr} to \gls{aws} \acrshort{iot} Core, which responds by providing a new certificate, thus initiating the rotation process.
+
+Another sequence diagram is shown in Figure \ref{fig:sequence_diagram_certificate_rotation}, detailing the process of integrating the application into the \acrshort{iot} device in collaboration with \gls{aws} services.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{implementation/sequence_diagram_certificate_rotation.pdf}
+    \captionof{figure}{Certificate rotation sequence diagram with \gls{aws} services \cite{aws_iot_certificate_rotator}}
+    \label{fig:sequence_diagram_certificate_rotation}
+    \endgroup
+\end{center}
+
+\subsection{Led application}
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{implementation/class_diagram_led_app.pdf}
+    \captionof{figure}{Led application class diagram}
+    \label{fig:class_diagram_led_app}
+    \endgroup
+\end{center}
+
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{implementation/sequence_diagram_led_app.pdf}
+    \captionof{figure}{Led application sequence diagram}
+    \label{fig:sequence_diagram_led_app}
+    \endgroup
+\end{center}
+
+\subsection{Button application}
+\begin{center}
+    \begingroup
+    \includegraphics[width=.8\columnwidth]{implementation/class_diagram_button_app.pdf}
+    \captionof{figure}{Button application class diagram}
+    \label{fig:class_diagram_button_app}
+    \endgroup
+\end{center}
+
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{implementation/sequence_diagram_button_app.pdf}
+    \captionof{figure}{Button application sequence diagram}
+    \label{fig:sequence_diagram_button_app}
+    \endgroup
+\end{center}
+
+\subsection{Corrupt application}
+
+\subsection{OS update}
