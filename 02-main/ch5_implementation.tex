@@ -414,6 +414,8 @@ The \textit{recipe.yaml} file describes the component, its required dependencies
 Starting at the top of the example, information about the component is presented. Next, the configuration (\textit{ComponentConfiguration}) is detailed, allowing the creation of variables and the configuration of access controls (\textit{accessControl}). The latter is used to define authorised operations, typically using the \acrshort{mqtt} protocol, such as the topics to which the component can publish or subscribe. Next, the dependent components are specified (\textit{ComponentDependencies}). Finally, the lifecycle (\textit{Lifecycle}) is detailed, along with the specification of the environment platform. In this example, a Docker application is launched and its image has been retrieved from the Amazon \acrshort{ecr} service via its URI.
 
 \subsection{Containerization}
+\label{sec:containerization}
+
 The Python applications developed in this project are run in Docker containers. The creation of the application image requires the use of a Dockerfile. This specifies the architecture of the embedded system on which the container is to run, as well as the base image used. Finally, the Dockerfile copies the directory containing the application into its environment, then simply executes a bash script. This bash script installs the necessary Python libraries and launches the Python application.
 \begin{center}
     \usemintedstyle{pastie}
@@ -448,7 +450,7 @@ Below is a description of the various classes :
 A sequence diagram illustrating how the application works is available in figure \ref{fig:sequence_diagram_certificate_rotation_app}.
 \begin{center}
     \begingroup
-    \includegraphics[width=1\columnwidth]{implementation/sequence_diagram_certificate_rotation_app.pdf}
+    \includegraphics[width=.9\columnwidth]{implementation/sequence_diagram_certificate_rotation_app.pdf}
     \captionof{figure}{Certificate rotation application sequence diagram}
     \label{fig:sequence_diagram_certificate_rotation_app}
     \endgroup
@@ -463,8 +465,10 @@ Another sequence diagram is shown in Figure \ref{fig:sequence_diagram_certificat
     \label{fig:sequence_diagram_certificate_rotation}
     \endgroup
 \end{center}
+When a device's certificate expires, \gls{aws} \acrshort{iot} Device Defender sends a notification to the device via the Amazon SNS service and a Lambda function. The device then creates a \acrshort{csr}, which it sends to \gls{aws} \acrshort{iot}. This service then generates a new unique certificate by signing it with the Amazon Certificate Authority. The new certificate is then sent to the device, which replaces it with the old one. Finally, confirmation of the rotation is sent to the \gls{cloud}. \gls{aws} \acrshort{iot} then triggers a Lambda function that revokes and deletes the old certificate. Meanwhile, the Greengrass service on the \acrshort{iot} device is restarted to support the new certificate for all new communications.
 
 \subsection{Led application}
+The led application was developed in Python using the class diagram shown in figure \ref{fig:class_diagram_led_app}.
 \begin{center}
     \begingroup
     \includegraphics[width=1\columnwidth]{implementation/class_diagram_led_app.pdf}
@@ -472,16 +476,24 @@ Another sequence diagram is shown in Figure \ref{fig:sequence_diagram_certificat
     \label{fig:class_diagram_led_app}
     \endgroup
 \end{center}
-
+Below is a description of the various classes :
+\begin{itemize}
+    \item \textit{Led} : Main class that includes the program's main loop. It changes the blinking frequency of the led according to the messages received. It also manages the activation and deactivation of the blinking.
+    \item \textit{Publish} : Class that publishes \acrshort{mqtt} messages to \gls{aws} \acrshort{iot}.
+    \item \textit{Subscribe} : Class that receives \acrshort{mqtt} messages from \gls{aws} \acrshort{iot} and the button application at local level.
+\end{itemize}
+The application's behaviour is shown in figure \ref{fig:sequence_diagram_led_app} by a sequence diagram.
 \begin{center}
     \begingroup
-    \includegraphics[width=1\columnwidth]{implementation/sequence_diagram_led_app.pdf}
+    \includegraphics[width=.9\columnwidth]{implementation/sequence_diagram_led_app.pdf}
     \captionof{figure}{Led application sequence diagram}
     \label{fig:sequence_diagram_led_app}
     \endgroup
 \end{center}
+The frequency is modified from an interface associated with \gls{aws} \acrshort{iot} Core, which sends messages asynchronously. The message is routed to the core class, which responds by sending an \acrshort{mqtt} message to \gls{aws} \acrshort{iot} to confirm receipt and optionally logs this data in an interface. Activation of the blinking is controlled by a button on the device, managed by the button application. Depending on the events, a local \acrshort{mqtt} message is transmitted to the main class. The \textit{Led} class sends a confirmation to \gls{aws} \acrshort{iot} with the status of the blinking, so that it can be logged if necessary. When the external button is pressed a second time, the status is logically reversed.
 
 \subsection{Button application}
+The button application has been implemented using the following class diagram \ref{fig:class_diagram_button_app}. The programming language remains Python.
 \begin{center}
     \begingroup
     \includegraphics[width=.8\columnwidth]{implementation/class_diagram_button_app.pdf}
@@ -489,7 +501,13 @@ Another sequence diagram is shown in Figure \ref{fig:sequence_diagram_certificat
     \label{fig:class_diagram_button_app}
     \endgroup
 \end{center}
+Here is a description of the different classes :
+\begin{itemize}
+    \item \textit{Button} : Main class that contains the program's main loop. This is the class that manages the interrupts each time the external button is pressed. \acrshort{mqtt} messages are prepared by this class.
+    \item \textit{Publish} : Class which publishes local \acrshort{mqtt} messages to the led application.
+\end{itemize}
 
+The sequence diagram \ref{fig:sequence_diagram_button_app} describes the internal workings of the application.
 \begin{center}
     \begingroup
     \includegraphics[width=1\columnwidth]{implementation/sequence_diagram_button_app.pdf}
@@ -497,7 +515,21 @@ Another sequence diagram is shown in Figure \ref{fig:sequence_diagram_certificat
     \label{fig:sequence_diagram_button_app}
     \endgroup
 \end{center}
+The user can press the external button connected to the \acrshort{iot} device at any time. An interrupt is triggered in the main class, reversing the current state of the blinking. In the sequence diagram scenario, blinking was initially enabled. The first time it is pressed, the blinking is deactivated. An \acrshort{mqtt} message is then sent to the led application. When the button is pressed again, the status is reversed and the blinking should reactivate.
 
 \subsection{Corrupt application}
+As mentioned in the section on containerization \ref{sec:containerization}, it is possible to specify the processor architecture on which the Docker container should run. On \nameref{sec:arm_systemready} certified embedded systems, the \gls{arm} processor architecture is \textit{arm64}. To make this application ineligible to run, an incorrect architecture is specified. In this case, the \textit{amd64} architecture has been deliberately specified in the Dockerfile, as follows :
+\begin{center}
+    \usemintedstyle{pastie}
+    \begin{minted}
+    [
+    fontsize=\scriptsize
+    ]{text}
+    FROM --platform=linux/amd64 python:latest
+
+    CMD ["echo", "Corrupt Docker container"]
+    \end{minted}
+\end{center}
+The Greengrass component itself is correctly implemented and will run normally. However, when executing the Docker command with the incompatible image, an error occurs.
 
 \subsection{OS update}
