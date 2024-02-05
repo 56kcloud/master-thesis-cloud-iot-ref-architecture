@@ -533,3 +533,38 @@ As mentioned in the section on containerization \ref{sec:containerization}, it i
 The Greengrass component itself is correctly implemented and will run normally. However, when executing the Docker command with the incompatible image, an error occurs.
 
 \subsection{OS update}
+The application simply consists of command lines. These are written directly in the structure of the Greengrass component. The corresponding file, \textit{recipe.yaml}, is constructed as follows :
+\begin{center}
+    \usemintedstyle{pastie}
+    \begin{minted}
+    [
+    fontsize=\scriptsize
+    ]{yaml}
+    RecipeFormatVersion: "2020-01-25"
+    ComponentName: "COMPONENT_NAME"
+    ComponentVersion: "{COMPONENT_VERSION}"
+    ComponentDescription: "This is a component to update OS."
+    ComponentPublisher: "{COMPONENT_AUTHOR}"
+    ComponentConfiguration:
+    DefaultConfiguration:
+        update_no: "/tmp/update_1"
+    Manifests:
+        - Platform:
+            os: linux
+            architecture: aarch64
+          Lifecycle:
+            run:
+                RequiresPrivilege: true
+                Script: |-
+                    if [ ! -f {configuration:/update_no} ] ; then
+                        touch {configuration:/update_no}
+
+                        # Write your commands
+                        apt-get update
+                        shutdown -r now
+                    else
+                        echo "Already updated."
+                    fi
+    \end{minted}
+\end{center}
+Each time the \acrlong{os} needs to be updated, a new version must be assigned to the \textit{update\_no} variable. This represents the name of a file with its path, ensuring that the update is only carried out once. In the script section, a condition checks whether this file has already been created. If so, this means that the \acrshort{os} update has already been performed. If not, the file is created and the commands specified under the comment "\textit{\# Write your commands}" are executed sequentially. These commands, chosen by the developer, are responsible for updating the functionality of the \acrshort{os} and are executed with full administrator privileges. The file created keeps a record that the update has already taken place when the device reboots to ensure the update.
