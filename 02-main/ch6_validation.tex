@@ -228,21 +228,83 @@ Figure \ref{fig:12_CertRotate_Log} shows the output message thread of the certif
     \label{fig:12_CertRotate_Log}
     \endgroup
 \end{center}
+Due to the incorrect platform specified for the corrupted application, it was unable to start up correctly. This is clearly shown in figure \ref{fig:12_CorruptApp_Log}. Greengrass tries to start the application three times before stopping.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{validation/12_CorruptApp_Log.png}
+    \captionof{figure}{Launching the corrupt application on the Raspberry Pi 4}
+    \label{fig:12_CorruptApp_Log}
+    \endgroup
+\end{center}
+During testing of the components, an additional observation was made. If a component is corrupted and subsequently deployed with updates to other components, these components will retain the old version. As long as the corrupted application is not corrected, all the components remain frozen on the last version deployed, and not on the last version of the component.
 
-\subsection{Updating a component}
+\subsection{Updating an application}
+In order to test the deployment of an update, the corrupted application was corrected by specifying the correct architecture. The Greengrass component has been updated since it has changed version (figure \ref{fig:14_NewComponentVersion}).
+\begin{center}
+    \begingroup
+    \includegraphics[width=.8\columnwidth]{validation/14_NewComponentVersion.png}
+    \captionof{figure}{New version of the corrupted application on \gls{aws}}
+    \label{fig:14_NewComponentVersion}
+    \endgroup
+\end{center}
+Looking at the Raspberry Pi 4 console in figure \ref{fig:14_CorruptApp_updated}, the application ran correctly. A text was printed as agreed.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{validation/14_CorruptApp_updated.png}
+    \captionof{figure}{Preview of the corrupted application on the Raspberry Pi 4}
+    \label{fig:14_CorruptApp_updated}
+    \endgroup
+\end{center}
+Now that no components have been corrupted, the health of the \acrshort{iot} device is good. This was noted on the \gls{aws} console.
+
+\subsection{\texorpdfstring{\acrshort{os}}{} update}
 
 \section{\texorpdfstring{\Gls{cloud_infrastructure}}{} destruction}
 
 % -- Your text goes here --
+The \gls{cloud_infrastructure} destruction was tested. To do this, the corresponding workflow was launched manually from the GitHub Actions console and passed successfully (figure \ref{fig:15_DestroyInfra}). It takes about 4 minutes. All the resources created by the Pulumi tool have been deleted. The Raspberry Pi 4 remains provisioned with its unique certificate. The claim certificate remains available in the S3 bucket with its private key. The Greengrass components have not been removed either.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.6\columnwidth]{validation/15_DestroyInfra.png}
+    \captionof{figure}{\Gls{cloud_infrastructure} destruction successfully completed}
+    \label{fig:15_DestroyInfra}
+    \endgroup
+\end{center}
+The Raspberry Pi 4's digital twin is still contained within \gls{aws} \acrshort{iot}. However, it has lost any policy for interacting with the \gls{cloud}. The \acrshort{mqtt} connection is therefore interrupted except locally on the device between the components. This was proven by pressing the external button on the Raspberry Pi 4 just once. The led stopped blinking and no status message was received on \gls{aws} \acrshort{iot}.
 
 \section{Management of authorised embedded systems}
 
 % -- Your text goes here --
 \subsection{Infrastructure deployment with a provisioned embedded system}
-
-\subsection{Unauthorised provisioning of an embedded system}
+Following the logic of the tests, the infrastructure was redeployed with the Raspberry Pi 4 already provisioned. Its digital twin was attached to the group of devices and to an \acrshort{iot} policy. \acrshort{mqtt} communication with the \gls{cloud} is now back up and running. Figure \ref{fig:16_AttachExistingThing} shows the attachment of the device to the new \gls{cloud_infrastructure} in the GitHub Actions console.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{validation/16_AttachExistingThing.png}
+    \captionof{figure}{Integration of Raspberry Pi 4 already provisioned}
+    \label{fig:16_AttachExistingThing}
+    \endgroup
+\end{center}
 
 \subsection{Deleting a provisioned embedded system}
+It is possible to remove a device from the \gls{aws} \gls{cloud} by deleting its serial number from the list of authorised devices. The serial number of the provisioned Raspberry Pi 4 has therefore been removed and this change has been pushed into Git. By following the GitHub Actions console in figure \ref{fig:17_RemoveThing}, it is possible to confirm that the device has been deleted. By browsing the \gls{aws} console, its digital twin no longer exists and no \acrshort{mqtt} message reaches \gls{aws} \acrshort{iot}.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{validation/17_RemoveThing.png}
+    \captionof{figure}{Removal of the provisioned Raspberry Pi 4}
+    \label{fig:17_RemoveThing}
+    \endgroup
+\end{center}
+For this Raspberry Pi 4 to be provisioned again, it must be authorised again and its SD card must be flashed again with the \acrshort{os} image.
+
+\subsection{Unauthorised provisioning of an embedded system}
+This same Raspberry Pi 4 was tested for reintegration into the \gls{cloud_infrastructure} without being authorised. Its serial number was therefore not included in the list of authorised devices. Its SD card was flashed with the same \acrshort{os} image as for all the other tests carried out. Both software, Docker Engine and \gls{aws} \acrshort{iot} Greengrass, were successfully installed. During the provisioning attempt, the Lambda function, triggered at each attempt, detected that this Raspberry Pi 4 was not authorised to be provisioned. Its certificate, which had been prepared and was supposed to be delivered to it, was therefore left waiting to be activated. After a while, the certificate disappears. This can be seen in figure \ref{fig:18_CertificatPending}.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{validation/18_CertificatPending.png}
+    \captionof{figure}{Certificat en attente d'activation}
+    \label{fig:18_CertificatPending}
+    \endgroup
+\end{center}
 
 \section{Provisioning of other Arm SystemReady certified embedded systems}
 
@@ -251,3 +313,40 @@ Figure \ref{fig:12_CertRotate_Log} shows the output message thread of the certif
 \section{\texorpdfstring{\Gls{cloud_infrastructure}}{} cost}
 
 % -- Your text goes here --
+An assessment of the costs of the \gls{aws} \gls{cloud_infrastructure} was carried out in order to understand the monthly and annual expenses to be expected. This estimate was carried out using the \gls{aws} Pricing Calculator. The estimate is shown in figure \ref{fig:19_CostEstimate}.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{validation/19_CostEstimate.png}
+    \captionof{figure}{\Gls{cloud_infrastructure} cost estimate}
+    \label{fig:19_CostEstimate}
+    \endgroup
+\end{center}
+The evaluation is based on a number of factors, assuming that it is the cost of the infrastructure in the production environment. The region chosen is Frankfurt (\textit{eu-central-1}). A fleet of 100 embedded systems is considered.
+
+\gls{aws} \acrshort{iot} Core is a high-cost service. Here is a list of factors taken into account :
+\begin{itemize}
+    \item Number of devices : 100
+    \item Protocol : \acrshort{mqtt}
+    \item Average size per message : 10 kB
+    \item Number of messages per month per device : 43'800 (1 par minute)
+    \item Number of rules triggered per month per device : 43'800
+\end{itemize}
+Each device sends one 10 kB \acrshort{mqtt} message per minute. Each message received in \gls{aws} \acrshort{iot} Core triggers a rule that diverts the message to another service. For example, Lambda functions can be called by these rules depending on the message heading.
+
+\gls{aws} \acrshort{iot} Greengrass is the most expensive service. Here are the factors taken into consideration:
+\begin{itemize}
+    \item Number of devices : 100
+    \item Activity period per month : 43'800 minutes (100\% activity)
+    \item Number of \acrshort{mqtt} topics : 1000
+\end{itemize}
+With 1000 \acrshort{mqtt} topics, each device can have 10 unique topics each.
+
+The \gls{aws} \acrshort{iot} Device Defender service is used to perform a daily audit by monitoring a single aspect, namely the expiry of certificates. The cost is virtually insignificant.
+
+The \gls{aws} Lambda service is used to execute operations when a function is triggered by a received message. It is estimated that each message received triggers a function, with a total of 4''380'000 messages sent per month for the fleet of 100 embedded systems. The average execution time for a Lambda function is one second.
+
+Amazon \acrfull{ecr} is used to store the Docker images generated for the applications developed. A monthly storage limit of 50 GB has been defined. None of the application images in this project exceeds 400 MB. Therefore, there can be up to 125 images of this size to reach the 50 GB limit.
+
+Amazon S3 is also used for storage, with three S3 buckets in use. The bucket containing the OS image for this reference architecture weighs 2.6 GB. The total of the three buckets remains at 2.6 GB, indicating that the Pulumi files on the state of the infrastructure, in addition to the provisioning files, do not exceed 100 MB.
+
+The Amazon SNS service used in the reference architecture is not taken into account, as it is triggered every so many years (a certificate has a lifetime of several years by default). Consequently, its cost is negligible.
