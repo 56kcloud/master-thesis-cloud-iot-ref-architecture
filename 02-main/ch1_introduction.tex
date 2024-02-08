@@ -19,11 +19,11 @@
 \label{chap:introduction}
 
 % -- Your text goes here --
-For a long time, embedded systems remained isolated from each other. Now it's time to bring them together with the world of the \gls{cloud}. Hardware devices have always been limited in terms of resources. Designs have allowed them to evolve according to their use case. However, physical limits have been observed. This is how the \hyperref[subsec:cloudcomputing]{cloud computing} came into being, partly in response to these difficulties.
+For a long time, embedded systems evolved in silos, isolated from each other. However, technology is evolving, and it's time to unite these systems with the world of the \gls{cloud}. Hardware devices have had limitations in terms of resources, although designs have improved these aspects depending on the use case. However, physical limitations remain. The emergence of \hyperref[subsec:cloudcomputing]{cloud computing}, without being for this problem, has offered partial solutions to these challenges.
 
-The \gls{cloud} provides a huge number of advantages. It frees up hardware resources to optimise the operation of embedded systems. It is likely that these systems will not be able to perform complex calculations. The \hyperref[subsec:cloudcomputing]{cloud computing} has the capacity to do this. The storage problem is another constraint. The \hyperref[subsec:cloudcomputing]{cloud computing} offers almost unlimited storage. It doesn't stop there. It is capable of offering constant scalability to infrastructures. It is made up of different independent services that can be easily connected together. There is vertical scaling, which means increasing the size of a resource, and horizontal scaling, which means increasing the number of resources.
+\hyperref[subsec:cloudcomputing]{Cloud computing} offers a number of advantages, not least the freeing up of hardware resources to optimise the operation of embedded systems. These devices, often limited in their complex processing capabilities, can now benefit from the computing power of the \gls{cloud}. Storage, another constraint, also finds infinite solutions in \hyperref[subsec:cloudcomputing]{cloud computing}, offering virtually unlimited storage capacity. However, the benefits of \hyperref[subsec:cloudcomputing]{cloud computing} are not limited to these aspects. They also include the constant scalability of infrastructures, with independent services that can be easily connected and the possibility of vertical and horizontal scaling.
 
-More and more engineers have decided to take an interest in this area in order to interconnect their embedded systems with the \gls{cloud}. This practice is an integral part of the \nameref{subsec:iot}. Due to increasingly large projects, not to mention artificial intelligence, they want to use \hyperref[subsec:cloudcomputing]{cloud computing} environments in order to no longer be constrained by resources. To make it easier to use a \gls{cloud_infrastructure}, companies have decided to offer \gls{cloud} platforms comprising a multitude of services for all types of use (\gls{aws}, Microsoft Azure, etc). It's also a way of letting engineers work on their business rather than worrying about maintaining and securing these infrastructures.
+This development has led to growing interest from engineers looking to interconnect their embedded systems with the \gls{cloud}, a practice now at the heart of the \acrfull{iot}. Faced with increasingly ambitious projects, coupled with the growing integration of artificial intelligence, engineers are looking to \hyperref[subsec:cloudcomputing]{cloud computing} environments to eliminate constraints and facilitate interconnection. To simplify the use of a \gls{cloud_infrastructure}, companies are offering \gls{cloud} platforms providing a multitude of services tailored to different needs (\gls{aws}, Microsoft Azure, etc.). This approach allows engineers to focus more on their business projects rather than spending time maintaining and securing the underlying infrastructure. In this context, the integration of embedded systems with the \gls{cloud} is becoming crucial to meeting the growing demands of the \acrshort{iot}.
 
 
 % -----------------------------------------------------------------------------
@@ -31,7 +31,7 @@ More and more engineers have decided to take an interest in this area in order t
 \label{subsec:56k.cloud}
 
 % -- Your text goes here --
-\nameref{subsec:56k.cloud} is a company based in Sion (Valais) since 2018. It offers various services through the \gls{cloud}. It provides solutions for businesses that want to improve their processes while reducing their costs. It is also a consultancy firm that seeks to promote the \gls{cloud} to customers who find it difficult to understand certain concepts in this rapidly expanding digital world. Collaborations with a number of partners are also an asset, enabling us to pool a wide range of skills to provide customers with a complete product. In order to share its vision of the \gls{cloud} more widely, it has additional premises in Winterthur (Zurich).
+\nameref{subsec:56k.cloud} is a company established in Sion (Valais) in 2018, specialising in the provision of \gls{cloud}-related services. It offers digital transformation to businesses looking to optimise their processes while reducing their costs. As a consultancy, it is committed to demystifying the \gls{cloud} for customers who may find it difficult to grasp the concepts of the ever-changing digital world. Its collaborative partnerships enhance its skills, enabling it to deliver complete solutions to customers. In order to share its vision of the \gls{cloud} more widely, \nameref{subsec:56k.cloud} also has additional premises in Winterthur (Zurich).
 \begin{center}
     \begingroup
     \includegraphics[width=0.5\columnwidth]{introduction/enterprise_logo.png}
@@ -39,18 +39,18 @@ More and more engineers have decided to take an interest in this area in order t
     \label{fig:enterprise_logo}
     \endgroup
 \end{center}
-The idea of a \gls{cloud} solution is to move an on-premise infrastructure to the \gls{cloud}. It's a way of reducing costs by only paying for what you use (pay-as-you-go), and by having something that can be easily scalable. It's also a good way of increasing the speed of processes by using optimal resources for each application.
+Digital transformation is a global process aimed at integrating digital technologies into all aspects of a company, from its business model and organisational culture to its processes and operations.
 
-In terms of consultancy, \nameref{subsec:56k.cloud} introduces \nameref{subsec:cloudnative} technology to customers who want to find out more. It also covers the subject of \acrshort{devops} and containerisation.
+As a consultant, \nameref{subsec:56k.cloud} introduces customers to the \nameref{subsec:cloudnative} approach and explores concepts such as \acrshort{devops} and containerisation.f \acrshort{devops} and containerisation.
 
 
 % -----------------------------------------------------------------------------
 \section{Problem}
 
 % -- Your text goes here --
-While \nameref{subsec:56k.cloud} mainly offers \gls{cloud} solutions, this company also works in the \acrfull{iot} sector. Recently, it quickly noticed a major problem between embedded systems engineers and those from the world of \gls{cloud}. More and more engineers are asking for devices to be able to link easily and quickly to a \gls{cloud_infrastructure}. However, there is currently no reference architecture that enables an infrastructure to be deployed and an embedded system to be provisioned directly.
+As part of its core business focused on \gls{cloud} solutions, \nameref{subsec:56k.cloud} is also active in the \acrshort{iot} sector. Recently, the company identified a significant problem relating to collaboration between engineers specialising in embedded systems and those from the \gls{cloud} domain. There is a growing demand for engineers to establish fast and efficient links between embedded devices and \glspl{cloud_infrastructure}. However, there is currently a lack of reference architectures for deploying an infrastructure while directly provisioning a fleet of embedded systems. A reference architecture is a preconceived model for a particular domain. It provides a solid foundation on which other architectures can be built, simplifying the work of software developers in that specific domain.
 
-This is a real problem because of the time needed and the difficulty for engineers to link hardware to a \gls{cloud_infrastructure}. Because of the two distinct professions, a person coming from the \gls{cloud} will need time to understand and set up an operating system capable of connecting to an infrastructure. And vice-versa, a person coming from the hardware world will need to familiarise themselves with a \gls{cloud_infrastructure}, not to mention setting it up while using the best practices of the \nameref{subsec:cloudnative}.
+This problem stems from the time required and the complexity for engineers to establish the connection between hardware and a \gls{cloud_infrastructure}. Because of specialist skills in two distinct areas, a \gls{cloud} professional will need time to understand and implement an operating system capable of connecting to an infrastructure, while an embedded systems expert will need to acquire knowledge of \gls{cloud_infrastructure} by following \nameref{subsec:cloudnative} best practice.
 \begin{center}
     \begingroup
     \includegraphics[width=1\columnwidth]{introduction/problem.pdf}
@@ -58,16 +58,18 @@ This is a real problem because of the time needed and the difficulty for enginee
     \label{fig:problem}
     \endgroup
 \end{center}
-The need to find a solution arose when engineers started asking electronic board manufacturers to design equipment offering services for linking to a \gls{cloud_infrastructure}. Since these manufacturers are not in this discipline, they do not want to spend time developing these types of solutions. It is therefore possible to identify the main players affected. There are the hardware engineers who are unable to meet the new needs of customers. Cloud engineers, who want to do the job for them, have to devote part of their time to introducing embedded concepts. Learning something new can quickly become time-consuming.
+The need to find a solution arose when engineers began to approach electronic board manufacturers to design equipment offering services for linking to a \gls{cloud_infrastructure}. However, these manufacturers, who specialise in hardware, are generally not inclined to devote the time to developing such solutions. The main players affected are hardware engineers, who struggle to meet new customer requirements, and \gls{cloud} engineers, who have to invest time in integrating embedded concepts. This learning phase can quickly become time-consuming.
 
-Nevertheless, a few solutions are gradually emerging. However, these remain very closed. There is no open source reference architecture capable of satisfying a wide range of products. These solutions therefore remain highly proprietary.
+Although a few solutions are beginning to emerge, most of them remain proprietary. To date, there is no open source reference architecture capable of providing a comprehensive response to the needs of a wide range of products.
 
 
 % -----------------------------------------------------------------------------
 \section{Objectives}
 
 % -- Your text goes here --
-The primary aim of this work is to develop a reference architecture enabling the deployment of a \gls{cloud_infrastructure} with the \gls{provisioning} of a fleet of embedded systems. The idea is to be able to automatically provision devices to the infrastructure when they are first started up. The infrastructure must contain the essential minimum of components to make the architecture as universal as possible. Since \nameref{subsec:56k.cloud} is a partner of \gls{arm}, a processor manufacturer, the embedded systems must be equipped with this. It should be added that \gls{arm} puts certifications on their components such as SystemReady. SysteamReady program guarantees that an operating system and the following software layers can function correctly in their processors. The embedded systems used in this project must be certified SystemReady. In addition, the infrastructure must be deployed on the \gls{aws} platform. This is the \gls{cloud} provider that \nameref{subsec:56k.cloud} works with.
+The main objective of this project is to design a reference architecture facilitating the deployment of a \gls{cloud_infrastructure} while ensuring the automated provisioning of a fleet of embedded systems. The emphasis is on the ability to provision devices automatically when they are first started up. The infrastructure must contain the essential minimum of services to make the architecture as universal as possible. Since \nameref{subsec:56k.cloud} is a partner of processor manufacturer \gls{arm}, the use of embedded systems equipped with \gls{arm} processors and certified \nameref{sec:arm_systemready} is favoured, in line with the quality standards set by \gls{arm}. The \nameref{sec:arm_systemready} programme guarantees that an operating system and the following software layers can function correctly in their processors.
+
+The infrastructure will be deployed on the \gls{aws} platform, \nameref{subsec:56k.cloud}'s partner \gls{cloud} provider. A fundamental aspect of this project is to promote open source, encouraging the formation of a community around this reference architecture. The aim is to enable engineers specialising in embedded systems and the \gls{cloud} to adopt this architecture easily, while focusing on the development of their end products. \nameref{subsec:cloudnative} best practices are integrated into the development process, while the use of \acrfull{ci} and \acrfull{cd} tools is crucial to ensure a robust architecture. Compatibility must be taken into account to ensure the functionality of the architecture on different embedded systems with \gls{arm} processors and \nameref{sec:arm_systemready} certification.
 \begin{center}
     \begingroup
     \includegraphics[width=1\columnwidth]{introduction/objective.pdf}
@@ -75,52 +77,21 @@ The primary aim of this work is to develop a reference architecture enabling the
     \label{fig:objective}
     \endgroup
 \end{center}
-The aim of this project is to be open source so that a community can form around it. It should enable embedded systems and \gls{cloud} engineers to use this reference architecture easily. They need to be able to focus on their final product. The best practices of \nameref{subsec:cloudnative} must be used for the development of this project. In order to guarantee a sound architecture, the use of \acrfull{ci} and \acrfull{cd} tools are essential. In addition, to ensure compatibility, the architecture must be functional on different embedded systems with a \gls{arm} processor and certified SystemReady.
-
-Secondly, once the reference architecture is functional, a demonstration project must be based on it. This is a proof of concept. The general idea is to deploy a \gls{cloud_infrastructure} on \gls{aws} and have various \gls{cloud} services automatically set up to interact with the embedded system. Data will then transit between these two worlds and it must be viewable from an interface.
-
-
-% -----------------------------------------------------------------------------
-\section{Project plan}
-
-% -- Your text goes here --
-Figure \ref{fig:work_packages} shows the project plan in the form of \glspl{work_package}.
-\begin{center}
-    \begingroup
-    \includegraphics[width=1\columnwidth]{introduction/work_packages.pdf}
-    \captionof{figure}{Project plan}
-    \label{fig:work_packages}
-    \endgroup
-\end{center}
-The first \gls{work_package} contains all the administration. It involves learning about the project, being aware of the issues and clearly defining the specifications. This takes around two weeks.
-
-About a month is spent researching existing solutions that are closest to the project. This involves drawing up a state of the art by researching scientific articles and other documentation.
-
-The third \gls{work_package} concerns the reference architecture. Almost two months are devoted to this. This implementation part will be the final product, which will be delivered as open source on a shared repository.
-
-In order to validate this architecture, a proof of concept will be carried out. This is the final \gls{work_package}. It will take just over a month. Tests will be carried out to prove that it works properly.
-
-% -----------------------------------------------------------------------------
-\section{Research methodology}
-
-% -- Your text goes here --
-The research methodology used in this thesis was first to draw up a state of the art on existing solutions that are as close as possible to this project. An overview of the reference architecture was then drawn up with a view to implementing it more easily. A choice of development tools was also made. At the same time, the implementation was designed. Finally, the results were validated by means of a proof of concept.
-
-The agile methodology, known as \gls{scrum}, was used throughout the project. It allows for iterative project management. Weekly meetings were arranged with the professor in charge of the project and, optionally, with some of the company's staff. To enable the project to progress efficiently, the \gls{kanban} method was used. This consists of virtual cards, each referring to a task. These cards are categorised in a table to determine the progress of each task. It's also a way of dividing the project into smaller parts so that time can be better estimated over the course of the project.
+In parallel with the reference architecture, a small demonstration project is to be based on it. This phase involves deploying a \gls{cloud_infrastructure} on \gls{aws}, with the development of a few applications to be deployed on the embedded systems. The data must pass between these two environments, while offering the possibility of viewing it from a web interface.
 
 
 % -----------------------------------------------------------------------------
 \section{Structure of this report}
 
 % -- Your text goes here --
-The \ref{chap:methodology} chapter (\nameref{chap:methodology}) contains a number of project methodologies for effective project management. The tools used are also described in addition to the training provided.
+The \ref{chap:analysis} chapter (\nameref{chap:analysis}) provides important definitions related to the project and examines the state of the art by looking at similar existing solutions.
 
-The \ref{chap:analysis} chapter (\nameref{chap:analysis}) contains several definitions and the state of the art. These are definitions of important terms that make up the project. The state of the art concerns the existing solutions that are closest to this project.
+The \ref{chap:design} chapter (\nameref{chap:design}) provides a comprehensive overview of the reference architecture, encompassing \gls{cloud_infrastructure}, embedded systems integration, the \acrshort{ci}/\acrshort{cd} process and applications.
 
-The \ref{chap:design} chapter (\nameref{chap:design}) contains an overview of the entire reference architecture. It includes the \gls{cloud_infrastructure}, the integration of embedded systems, the \acrshort{ci}/\acrshort{cd} pipeline and the applications.
+The \ref{chap:implementation} chapter (\nameref{chap:implementation}) details the implementation of each component of the reference architecture, highlighting the tools used and their functionalities.
 
-The \ref{chap:implementation} chapter (\nameref{chap:implementation}) contains the implementation of all the parts included in the reference architecture. The tools used and how they work are presented.
+The \ref{chap:validation} chapter (\nameref{chap:validation}) analyses the results of the tests carried out on the reference architecture, validating its performance.
 
-The \ref{chap:validation} chapter (\nameref{chap:validation}) contains the analysis and validation of the results of the reference architecture.
+The \ref{chap:methodology} chapter (\nameref{chap:methodology}) sets out the project plan, the methodologies adopted and describes the tools used as well as the associated training.
 
-The \ref{chap:conclusions} chapter (\nameref{chap:conclusions}) concludes the thesis by outlining the current state of the research, the problems encountered and future steps.
+The \ref{chap:conclusions} chapter (\nameref{chap:conclusions}) closes the thesis by presenting the current state of the research, the obstacles encountered and the future directions of the project.
