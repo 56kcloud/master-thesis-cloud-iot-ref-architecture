@@ -150,6 +150,22 @@ The Raspberry Pi 4 was then powered up and booted for the first time. All the so
 \end{center}
 
 \subsection{Adding a second Raspberry Pi 4}
+A second Raspberry Pi 4 has been successfully provisioned. Its serial number has been added to the list of authorised devices. A proof of its digital twin can be seen in figure \ref{fig:21_SecondProvisionRPi}.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.25\columnwidth]{validation/21_SecondProvisionRPi.png}
+    \captionof{figure}{Second provisioning confirmed on \gls{aws}}
+    \label{fig:21_SecondProvisionRPi}
+    \endgroup
+\end{center}
+The components have been deployed correctly. A message exchange can be seen on the \gls{aws} \acrshort{mqtt} client interface (figure \ref{fig:21_SecondRPiMQTT}). A new blinking frequency was sent to the second Raspberry Pi 4 and a message from it was returned to \gls{aws} \acrshort{iot}.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.8\columnwidth]{validation/21_SecondRPiMQTT.png}
+    \captionof{figure}{Exchanging \acrshort{mqtt} messages with the second Raspberry Pi 4}
+    \label{fig:21_SecondRPiMQTT}
+    \endgroup
+\end{center}
 
 \section{Applications}
 
@@ -258,6 +274,14 @@ Looking at the Raspberry Pi 4 console in figure \ref{fig:14_CorruptApp_updated},
 Now that no components have been corrupted, the health of the \acrshort{iot} device is good. This was noted on the \gls{aws} console.
 
 \subsection{\texorpdfstring{\acrshort{os}}{} update}
+An update simulation was tested. The commands written were executed correctly and the Raspberry Pi 4 rebooted automatically without restarting the command lines. Evidence of this can be seen in figure \ref{fig:20_os_update}. The first time it was run, the \textit{apt-get update} command was issued, followed by the restart command. When the Greengrass component is launched a second time, it is noted that the update has already taken place.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{validation/20_os_update.png}
+    \captionof{figure}{Behaviour of the \acrshort{os} update application}
+    \label{fig:20_os_update}
+    \endgroup
+\end{center}
 
 \section{\texorpdfstring{\Gls{cloud_infrastructure}}{} destruction}
 
