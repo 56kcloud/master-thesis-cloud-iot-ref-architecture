@@ -13,7 +13,7 @@
 \label{chap:validation}
 
 % -- Your text goes here --
-This chapter presents the tests carried out and their results to prove that the reference architecture works in its entirety. The notion of cost at \gls{cloud_infrastructure} level is also addressed. 
+This chapter outlines the tests carried out, along with their results, to demonstrate the proper functioning of the reference architecture as a whole. In addition, it examines the notion of cost linked to the \gls{cloud_infrastructure}.
 
 \minitoc
 \newpage
@@ -34,7 +34,7 @@ An IAM role has been set up to authorise only the project's GitHub repository to
 \begin{center}
     \begingroup
     \includegraphics[width=.8\columnwidth]{validation/2_OIDCRole.png}
-    \captionof{figure}{IAM OIDC role}
+    \captionof{figure}{IAM \acrshort{oidc} role}
     \label{fig:2_OIDCRole}
     \endgroup
 \end{center}
@@ -121,6 +121,24 @@ A deployment service is ready to deploy applications as soon as devices are prov
     \endgroup
 \end{center}
 
+\subsection{Second environment deployment}
+Above, the development environment has been deployed. This section deals with testing the deployment of the production infrastructure. To do this, the variables configured in GitHub were adjusted (figure \ref{fig:22_ProdInfraVariables}). A new \acrshort{oidc} connection has been set up. By specifying the environment to the \textit{IAC\_STACK\_NAME} variable, it will call the associated Pulumi configuration file (\textit{Pulumi.prod.yaml}).
+\begin{center}
+    \begingroup
+    \includegraphics[width=.5\columnwidth]{validation/22_ProdInfraVariables.png}
+    \captionof{figure}{GitHub visible variables for the production environment}
+    \label{fig:22_ProdInfraVariables}
+    \endgroup
+\end{center}
+The \acrshort{ci}/\acrshort{cd} pipeline was launched manually from the GitHub interface. All workflows passed. Figure \ref{fig:22_ProdInfraS3} shows part of the deployment of the production infrastructure. The S3 buckets are named in accordance with the variables defined in GitHub. In addition, figure \ref{fig:22_ProdInfraS3} is a screenshot from an \gls{aws} account separate from the development account, specifically dedicated to production.
+\begin{center}
+    \begingroup
+    \includegraphics[width=1\columnwidth]{validation/22_ProdInfraS3.png}
+    \captionof{figure}{S3 buckets in the production environment}
+    \label{fig:22_ProdInfraS3}
+    \endgroup
+\end{center}
+
 \section{\texorpdfstring{\Gls{provisioning}}{} a Raspberry Pi 4}
 
 % -- Your text goes here --
@@ -148,6 +166,7 @@ The Raspberry Pi 4 was then powered up and booted for the first time. All the so
     \label{fig:8_Provisioned_AWS}
     \endgroup
 \end{center}
+It should be noted that the power supply to the Raspberry Pi 4 was removed several times. Each time it was reconnected, the device reconnected to \gls{aws} \acrshort{iot} Core.
 
 \subsection{Adding a second Raspberry Pi 4}
 A second Raspberry Pi 4 has been successfully provisioned. Its serial number has been added to the list of authorised devices. A proof of its digital twin can be seen in figure \ref{fig:21_SecondProvisionRPi}.
@@ -196,7 +215,7 @@ It is possible to see an overview of the Raspberry Pi 4 on \gls{aws} as shown in
 \end{center}
 
 \subsection{Applications interaction}
-The applications were then tested. The first was the led application. The \gls{aws} web interface was used to send \acrshort{mqtt} messages and view the data received. A message is sent to the Raspberry Pi 4 to change its led blinking frequency. A response was sent back to \gls{aws} \acrshort{iot} in another field including the new frequency. A proof can be found in figure \ref{fig:12_FrequencyChange}.
+The applications were then tested. The first was the led application. The \gls{aws} web interface was used to send \acrshort{mqtt} messages and view the data received. A message is sent to the Raspberry Pi 4 to change its led blinking frequency. A response was sent back to \gls{aws} \acrshort{iot} in another topic including the new frequency. A proof can be found in figure \ref{fig:12_FrequencyChange}.
 \begin{center}
     \begingroup
     \includegraphics[width=.5\columnwidth]{validation/12_FrequencyChange.png}
@@ -204,7 +223,7 @@ The applications were then tested. The first was the led application. The \gls{a
     \label{fig:12_FrequencyChange}
     \endgroup
 \end{center}
-Figure \ref{fig:12_LedApp_Log} shows the led application output message thread. It is possible to view different frequencies received on the Raspberry Pi 4.
+Figure \ref{fig:12_LedApp_Log} shows the led application output message thread. It is possible to view a frequency received on the Raspberry Pi 4.
 \begin{center}
     \begingroup
     \includegraphics[width=1\columnwidth]{validation/12_LedApp_Log.png}
@@ -325,14 +344,40 @@ This same Raspberry Pi 4 was tested for reintegration into the \gls{cloud_infras
 \begin{center}
     \begingroup
     \includegraphics[width=1\columnwidth]{validation/18_CertificatPending.png}
-    \captionof{figure}{Certificat en attente d'activation}
+    \captionof{figure}{Certificate pending activation}
     \label{fig:18_CertificatPending}
     \endgroup
 \end{center}
 
-\section{Provisioning of other Arm SystemReady certified embedded systems}
+\section{Provisioning of other \texorpdfstring{\nameref{sec:arm_systemready}}{} certified embedded systems}
 
 % -- Your text goes here --
+The aim was to extend the provisioning capability to other \nameref{sec:arm_systemready} certified embedded systems, beyond the Raspberry Pi 4. Unfortunately, this attempt was not successful. Another device tested was the I-Pi SMARC IMX8M Plus board, which is \nameref{sec:arm_systemready} IR certified. Despite flashing the same \acrshort{os} image as the Raspberry Pi 4 onto the SD card of this new device, booting failed. It seems that the \textit{Raspberry Pi \acrshort{os} Lite} base image is specific to Raspberry devices. It is likely that each manufacturer prepares separate \acrshort{os} images based on the same Linux distribution for their devices, even with \nameref{sec:arm_systemready} certification. Another custom \acrshort{os} image would surely have had to be created specifically for the I-Pi SMARC IMX8M Plus board to boot. Each image can be adapted using the Packer tool and its plugin for \gls{arm} architectures.
+
+As a partial workaround to this failure, a virtual Raspberry Pi 4 was tested on an \gls{arm} development tool called \acrfull{avh} \cite{arm_avh}. \acrshort{avh} enables \acrshort{iot} development kits, \gls{arm}-based processors and cloud-based systems to be virtualised, speeding up the development of \acrshort{iot} software. In this type of tool, it was not possible to integrate the custom \acrshort{os} image. Among the options available, the basic \textit{Raspberry Pi \acrshort{os}} image was selected. By connecting via SSH, the provisioning files were manually copied to the virtual device (figure \ref{fig:23_AVHConfigFiles}). An arbitrary serial number was specified and added to the list of authorised devices.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.8\columnwidth]{validation/23_AVHConfigFiles.png}
+    \captionof{figure}{Access to the Raspberry Pi 4 on \acrshort{avh}}
+    \label{fig:23_AVHConfigFiles}
+    \endgroup
+\end{center}
+The \textit{provision.sh} script was run manually as administrator. The installation of Docker Engine and \gls{aws} \acrshort{iot} Greengrass Core was successful, as was the provisioning. Its digital twin was created in \gls{aws} \acrshort{iot}, as shown in figure \ref{fig:23_AVHProvisioned}.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.3\columnwidth]{validation/23_AVHProvisioned.png}
+    \captionof{figure}{Virtual device provisioning confirmed on \gls{aws}}
+    \label{fig:23_AVHProvisioned}
+    \endgroup
+\end{center}
+Finally, the Greengrass components were successfully deployed (figure \ref{fig:23_AVHComponentsDeployed}). The health status of the device returned to \gls{aws} is not good due to the led and button applications not launching correctly. This is due to the GPIO library reserved exclusively for Raspberry that is not available on \acrshort{avh}. It is nevertheless remarkable that the certificate rotation application is running. In addition, the \acrshort{os} update application completed correctly and the device rebooted as expected. The corrupted application was executed correctly since in an earlier test its problem had been solved.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.8\columnwidth]{validation/23_AVHComponentsDeployed.png}
+    \captionof{figure}{Deploying Greengrass components on the virtual device}
+    \label{fig:23_AVHComponentsDeployed}
+    \endgroup
+\end{center}
 
 \section{\texorpdfstring{\Gls{cloud_infrastructure}}{} cost}
 
@@ -352,7 +397,7 @@ The evaluation is based on a number of factors, assuming that it is the cost of 
     \item Number of devices : 100
     \item Protocol : \acrshort{mqtt}
     \item Average size per message : 10 kB
-    \item Number of messages per month per device : 43'800 (1 par minute)
+    \item Number of messages per month per device : 43'800 (1 per minute)
     \item Number of rules triggered per month per device : 43'800
 \end{itemize}
 Each device sends one 10 kB \acrshort{mqtt} message per minute. Each message received in \gls{aws} \acrshort{iot} Core triggers a rule that diverts the message to another service. For example, Lambda functions can be called by these rules depending on the message heading.
@@ -367,10 +412,17 @@ With 1000 \acrshort{mqtt} topics, each device can have 10 unique topics each.
 
 The \gls{aws} \acrshort{iot} Device Defender service is used to perform a daily audit by monitoring a single aspect, namely the expiry of certificates. The cost is virtually insignificant.
 
-The \gls{aws} Lambda service is used to execute operations when a function is triggered by a received message. It is estimated that each message received triggers a function, with a total of 4''380'000 messages sent per month for the fleet of 100 embedded systems. The average execution time for a Lambda function is one second.
+The \gls{aws} Lambda service is used to execute operations when a function is triggered by a received message. It is estimated that each message received triggers a function, with a total of 4'380'000 messages sent per month for the fleet of 100 embedded systems. The average execution time for a Lambda function is one second.
 
 Amazon \acrfull{ecr} is used to store the Docker images generated for the applications developed. A monthly storage limit of 50 GB has been defined. None of the application images in this project exceeds 400 MB. Therefore, there can be up to 125 images of this size to reach the 50 GB limit.
 
-Amazon S3 is also used for storage, with three S3 buckets in use. The bucket containing the OS image for this reference architecture weighs 2.6 GB. The total of the three buckets remains at 2.6 GB, indicating that the Pulumi files on the state of the infrastructure, in addition to the provisioning files, do not exceed 100 MB.
+Amazon S3 is also used for storage, with three S3 buckets in use. The bucket containing the \acrshort{os} image for this reference architecture weighs 2.6 GB. The total of the three buckets remains at 2.6 GB, indicating that the Pulumi files on the state of the infrastructure, in addition to the provisioning files, do not exceed 100 MB.
 
 The Amazon SNS service used in the reference architecture is not taken into account, as it is triggered every so many years (a certificate has a lifetime of several years by default). Consequently, its cost is negligible.
+
+\section{Observations}
+
+% -- Your text goes here --
+During this study, deployment incidents were occasionally noted when using the Pulumi tool. It was observed that certain resources, which are dependent on one another, can sometimes be called up before their creation is complete, despite this dependency being specified in the infrastructure description. This leads to errors during deployment. To solve this problem, simply restart the deployment workflow to allow the infrastructure to create the last missing resources.
+
+Another observation concerns \gls{aws} regions. It should be noted that this reference architecture cannot be deployed in all the regions offered by \gls{aws}. Some recent resources, such as \gls{aws} \acrshort{iot} Greengrass, are not yet available in all regions. Development has focused exclusively on the Frankfurt region (\textit{eu-central-1}).
