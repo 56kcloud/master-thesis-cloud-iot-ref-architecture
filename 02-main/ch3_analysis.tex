@@ -11,14 +11,14 @@
 \label{chap:analysis}
 
 % -- Your text goes here --
-The analysis begins by explaining the fundamental concepts that are being worked on throughout the project. Next, a state of the art is provided on the various tools, methods and technologies used in \hyperref[subsec:cloudcomputing]{cloud computing} and \acrshort{iot}.
+The analysis begins by detailing the fundamental concepts addressed throughout the project. It then reviews the state of the art in terms of the various tools, methods and technologies used in \hyperref[subsec:cloudcomputing]{cloud computing} and \acrshort{iot}.
 
 \minitoc
 \newpage
 
 % ------------------------------------------------------------------------------
 \section{Definitions}
-Before going into more detail on the subject of this work, it is important to look at the definitions of the various terms frequently used.
+Before delving into the subject of this work, it is important to clarify the definitions of frequently used terms.
 
 % -- Your text goes here --
 \subsection{Reference architecture}
@@ -33,7 +33,7 @@ The National Institute of Standards and Technology (NIST) \cite{nist_definition_
 \begin{quote}
     \textit{Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that can be rapidly provisioned and released with minimal management effort or service provider interaction. \cite{nist_definition_cloud_computing}}
 \end{quote}
-It is added in the article \cite{nist_definition_cloud_computing} that this model of \gls{cloud} consists of three service models and four deployment models. The service models are as follows:
+Their document \cite{nist_definition_cloud_computing} adds that this model of \gls{cloud} consists of three service models and four deployment models. The service models are as follows:
 \begin{itemize}
     \item \acrfull{iaas} : The capability offered to the consumer consists of providing processing, storage, network and other fundamental computing resources where the consumer can deploy and run arbitrary software, which may include operating systems and applications. The consumer manages the operating systems, storage and applications.
     \item \acrfull{paas} : The capacity provided to the consumer consists of deploying on the \gls{cloud_infrastructure} applications created or acquired by the consumer using programming languages, libraries, services and tools supported by the provider. The consumer manages only the applications and storage.
@@ -56,58 +56,33 @@ The deployment models are as follows \cite{nist_definition_cloud_computing} :
 
 \subsection{\Gls{cloud}-Native}
 \label{subsec:cloudnative}
-\nameref{subsec:cloudnative} is an approach to software development which aims to design, implement and manage applications in the \gls{cloud}. \nameref{subsec:cloudcomputing} environments will be necessary for the proper execution of workloads.
+The \nameref{subsec:cloudnative} approach is a software development methodology focused on the design, implementation and management of applications, integrated in the \gls{cloud}. It requires \gls{cloud}. \nameref{subsec:cloudcomputing} environments to run workloads efficiently.
 
-The infrastructure can be deployed in private, public or hybrid \glspl{cloud}. This approach will enable the development of modern, easily scalable applications. The flexibility aspect is also emphasised thanks to techniques for decoupling the multiple services of an application. Another strength of the \gls{cloud} is its reliability and sustainability. Since the number of resources is incalculable and they are distributed around the world, redundancy guarantees security in the event of an incident, with almost instantaneous migration of an application's execution. The customer is therefore very often spared any unforeseen events. It is also possible to provide updates in real time and on a recurring basis.
+This approach enables infrastructure to be deployed in private, public or hybrid \gls{cloud} environments, promoting the development of modern applications with easy scalability. Flexibility is further enhanced by techniques for decoupling the different services within an application. \nameref{subsec:cloudcomputing} also offers reliability and durability, with redundancy ensuring security in the event of an incident, with migration of an application's execution. It also facilitates real-time and recurring updates.
 
-The main benefits are high efficiency, reduced costs and high availability. Applications will be able to exploit resources that are optimal for their use case. The term pay-as-you-go is widely used, as the cost will depend solely on the use made of the resources and not on anything else, such as their maintenance, hardware security, etc. Availability is high because of the astronomical number of resources made available by the various \gls{cloud} environment providers.
+The main benefits include high efficiency, reduced costs and high availability. Applications can exploit optimal resources according to their needs, and the pay-as-you-go model means that you only pay for the actual use of resources, independently of other aspects such as maintenance and hardware security. Availability is ensured by the diversity of resources provided by the different \gls{cloud} service providers.
 
 \subsection{\acrlong{iot}}
 \label{subsec:iot}
-\acrfull{iot} refers to the interconnection between physical objects and the internet. Objects can range from light bulbs to medical devices and much more. The main areas concerned are home automation and medical technology.
+\acrfull{iot} refers to the interconnection between physical objects and the internet. These objects can encompass a variety of items, from light bulbs to medical devices, and many more, mainly in the home automation and medical fields.
 
-This involves linking different objects and applications to move into an automated world. As this becomes more and more widespread, the services needed to make it work need a huge amount of resources. This has been made possible by the \gls{cloud}. Everything must be accessible from anywhere in the world, quickly and securely. Several communication technologies are possible to guarantee excellent accessibility and reliability.
+The \acrshort{iot} aims to establish connections between various objects and applications, helping to create an automated world known as the \acrshort{iot} network. This growing expansion requires significant resources, made available thanks to \hyperref[subsec:cloudcomputing]{cloud computing}. Fast and secure global accessibility is essential. Several communication technologies are used to ensure reliable connectivity.
+
 
 % ------------------------------------------------------------------------------
 \section{Problem formulation}
 
 % -- Your text goes here --
-The general question for analysis is: "Which technologies should be used to develop a reference architecture".
+The general question for analysis is: "Which technologies are best suited to the development of this reference architecture".
 
-To help answer this question, it is important to consider the following aspects:
+To answer this question, a number of key aspects need to be considered :
 \begin{itemize}
     \item Technology
     \item Environment
     \item Tools
     \item Certification
 \end{itemize}
-Since the development uses the \nameref{subsec:cloudnative} approach, its history can be described first. The integration of the \acrshort{iot} world into \hyperref[subsec:cloudcomputing]{cloud computing} must then be observed through various scientific works and research. A study of \gls{cloud} service providers must be undertaken to differentiate the iot services offered by each one. As the reference architecture is based on an \acrfull{iac}, research into \acrshort{iac} tools is carried out. Finally, it is worth finding out whether SystemReady certification exists for electronic boards using an \gls{arm} processor architecture.
-
-
-% ------------------------------------------------------------------------------
-\section{Literature search}
-
-% -- Your text goes here --
-Literature search has focused on academic search engines. The following search engines were used :
-\begin{itemize}
-    \item \href{https://scholar.google.com}{Google Scholar}
-    \item \href{https://ieeexplore.ieee.org/Xplore/home.jsp}{IEEE Xplore}
-    \item \href{https://www.sciencedirect.com}{ScienceDirect}
-\end{itemize}
-The sources were mainly conference papers. Some information was found on websites. The following keywords were used to find sources that met the requirements of this analysis:
-\begin{itemize}
-    \item integration
-    \item embedded systems
-    \item \acrshort{iot}
-    \item \nameref{subsec:cloudnative}
-    \item \gls{cloud}
-    \item \hyperref[subsec:cloudcomputing]{cloud computing}
-    \item \gls{cloud} providers
-    \item \gls{cloud} platforms
-    \item \acrlong{iac}
-    \item \acrshort{iac} tools
-    \item \nameref{sec:arm_systemready}
-\end{itemize}
+With this in mind, the analysis begins by tracing the evolution of the \nameref{subsec:cloudnative} approach. Next, the integration of \acrshort{iot} in the context of \hyperref[subsec:cloudcomputing]{cloud computing} is studied through various research studies. An exploration of the \acrshort{iot} services offered by the various \gls{cloud} service providers is undertaken to discern their specific features. Given that the reference architecture is based on \acrfull{iac}, an investigation is carried out into the \acrshort{iac} tools available. Finally, particular attention is paid to \nameref{sec:arm_systemready} certification.
 
 
 % ------------------------------------------------------------------------------
@@ -135,17 +110,17 @@ The first change came in the 2000s with the virtualisation of servers, although 
 \end{center}
 
 \subsection{The hybrid}
-Despite this, a minimum of one server had to be purchased for an application to work. There were also resource limits for a certain number of applications. Unfortunately, not everyone could afford to buy new servers. In 2006, \gls{aws} launched three web services, \acrfull{ec2}, Simple Storage Service (S3) and Simple Queue Service (SQS), to allow organisations and individuals to use Amazon's IT infrastructure on an as-needed basis at basic prices \cite{evaluation_aws_services}. This initiative stems from a restructuring of the Amazon platform for better scalability and this has made it possible to sell virtual servers as a service \cite{ec2_origins}. By extension, the myth of making money from servers not in use for the majority of the year has been debunked by Benjamin Black, co-founder of the \acrshort{ec2} \cite{ec2_origins}. This is where the world of \gls{cloud} really began. Kratzke and Quint confirm this in their scientific article \cite{understanding_cloud_native}. The purpose of the \acrshort{ec2} service, which is still used today, is to offer a virtual machine in the \gls{cloud}. This is a \hyperref[subsec:cloudcomputing]{cloud computing} environment for running workloads. It is now possible to migrate your infrastructure from the database to the \gls{cloud}. The corresponding expression is "Lift and Shift" \cite{ibm_lifAndShift}. These were undoubtedly the first so-called \nameref{subsec:cloudnative} approaches \cite{history_cloud_native}. However, this term only appeared in papers for the first time in 2012 \cite{understanding_cloud_native}. These were two conference papers proposing solutions for \nameref{subsec:cloudnative} applications \cite{closer12, 4caast}. Organisations have learned a lot about only paying for what you use. From there, there's a move to hybrid where companies are still using their on-premises servers alongside servers in the \gls{cloud}. \cite{history_cloud_native}
+Despite this, a minimum of one server had to be purchased for an application to work. There were also resource limits for a certain number of applications. Unfortunately, not everyone could afford to buy new servers. In 2006, \gls{aws} launched three web services, Elastic Compute Cloud (EC2), Simple Storage Service (S3) and Simple Queue Service (SQS), to allow organisations and individuals to use Amazon's IT infrastructure on an as-needed basis at basic prices \cite{evaluation_aws_services}. This initiative stems from a restructuring of the Amazon platform for better scalability and this has made it possible to sell virtual servers as a service \cite{ec2_origins}. By extension, the myth of making money from servers not in use for the majority of the year has been debunked by Benjamin Black, co-founder of the EC2 \cite{ec2_origins}. This is where the world of \gls{cloud} really began. Kratzke and Quint confirm this in their scientific article \cite{understanding_cloud_native}. The purpose of the EC2 service, which is still used today, is to offer a virtual machine in the \gls{cloud}. This is a \hyperref[subsec:cloudcomputing]{cloud computing} environment for running workloads. It is now possible to migrate your infrastructure from the database to the \gls{cloud}. The corresponding expression is "Lift and Shift" \cite{ibm_lifAndShift}. These were undoubtedly the first so-called \nameref{subsec:cloudnative} approaches \cite{history_cloud_native}. However, this term only appeared in papers for the first time in 2012 \cite{understanding_cloud_native}. These were two conference papers proposing solutions for \nameref{subsec:cloudnative} applications \cite{closer12, 4caast}. Organisations have learned a lot about only paying for what you use. From there, there's a move to hybrid where companies are still using their on-premises servers alongside servers in the \gls{cloud}. \cite{history_cloud_native}
 
 \subsection{All to the \texorpdfstring{\gls{cloud}}{}}
 A new barrier has now been crossed. It's no longer a question of doing hybrid, but of transferring the entire infrastructure to the \gls{cloud}. This was made possible when \gls{cloud} service providers such as \gls{aws}, Microsoft Azure, Google Cloud and many others developed several services for all types of use. The reason there are different services is quite simply to decouple application functionality as much as possible. This is known as a microservices architecture. The risk of an entire application being interrupted in the event of a problem is much less likely. However, some organisations still have applications that are several decades old and have a monolithic architecture. It is not necessarily possible to decouple functionalities. That's why they work on a hybrid basis. \cite{history_cloud_native}
 
 \subsection{The \texorpdfstring{\nameref{subsec:cloudnative}}{} approach}
-If we ask several engineers today about the definition of the \nameref{subsec:cloudnative} approach, we will find varying interpretations. There are currently three main schools of thought on this subject \cite{history_cloud_native}. The first group considers that an approach is \nameref{subsec:cloudnative} when all the workloads run in the \gls{cloud}. A minority within this group argue that you can be partially \nameref{subsec:cloudnative}, i.e. have one complete application deployed in the \gls{cloud} while maintaining another application locally. However, others feel that this is still a hybrid approach. A second group says that to be truly \nameref{subsec:cloudnative}, you need to fully exploit the capabilities offered by the \gls{cloud}. This means not only using the basic services of a \gls{cloud} provider, but also making full use of the advanced features on offer, such as serverless functions. Some even consider that a company has to be born in the \gls{cloud} to be truly \nameref{subsec:cloudnative}, a phenomenon that is increasingly being observed, with companies launching their first applications directly in the \gls{cloud} without ever having used on-premises servers. This is the case for the company \nameref{subsec:56k.cloud} \colorbox{red}{To be confirmed}. \cite{history_cloud_native}
+If we ask several engineers today about the definition of the \nameref{subsec:cloudnative} approach, we will find varying interpretations. There are currently three main schools of thought on this subject \cite{history_cloud_native}. The first group considers that an approach is \nameref{subsec:cloudnative} when all the workloads run in the \gls{cloud}. A minority within this group argue that you can be partially \nameref{subsec:cloudnative}, i.e. have one complete application deployed in the \gls{cloud} while maintaining another application locally. However, others feel that this is still a hybrid approach. A second group says that to be truly \nameref{subsec:cloudnative}, you need to fully exploit the capabilities offered by the \gls{cloud}. This means not only using the basic services of a \gls{cloud} provider, but also making full use of the advanced features on offer, such as serverless functions. Some even consider that a company has to be born in the \gls{cloud} to be truly \nameref{subsec:cloudnative}, a phenomenon that is increasingly being observed, with companies launching their first applications directly in the \gls{cloud} without ever having used on-premises servers. \cite{history_cloud_native}
 
 In 2018, a brief history of \gls{cloud} application architectures described the term \nameref{subsec:cloudnative} as follows :
 \begin{quote}
-    \textit{\Glspl{cloud_infrastructure} (\acrshort{iaas}) and platforms (\acrshort{paas}) are built to be elastic. Elasticity is understood as the degree to which a system adapts to workload changes by provisioning and de-provisioning resources automatically. Without this, \hyperref[subsec:cloudcomputing]{cloud computing} is very often not reasonable from an economic point of view. Over time, system engineers learned to understand this elasticity options of modern \gls{cloud} environments better. Eventually, systems were designed for such elastic \glspl{cloud_infrastructure}, which increased the utilization rates of underlying computing infrastructures via new deployment and design approaches like containers, microservices or serverless architectures. This design intention is often expressed using the term \nameref{subsec:cloudnative}. \cite{history_cloud_application}}
+    \textit{\Glspl{cloud_infrastructure} (\acrshort{iaas}) and platforms (\acrshort{paas}) are built to be elastic. Elasticity is understood as the degree to which a system adapts to workload changes by \gls{provisioning} and de-\gls{provisioning} resources automatically. Without this, \hyperref[subsec:cloudcomputing]{cloud computing} is very often not reasonable from an economic point of view. Over time, system engineers learned to understand this elasticity options of modern \gls{cloud} environments better. Eventually, systems were designed for such elastic \glspl{cloud_infrastructure}, which increased the utilization rates of underlying computing infrastructures via new deployment and design approaches like containers, microservices or serverless architectures. This design intention is often expressed using the term \nameref{subsec:cloudnative}. \cite{history_cloud_application}}
 \end{quote}
 
 
@@ -156,7 +131,7 @@ In 2018, a brief history of \gls{cloud} application architectures described the 
 With technology advancing at a rapid pace, today's world appreciates help in making everyday life better \cite{state_of_the_art_integration_iot_cloudComputing}. Embedded systems that have become increasingly connected now offer this service. However, since they need to attend any location for any domain and task, they need to be small for better integration. As a result, resources are limited for computing operations, data storage, data processing and so on. The built-in security and low energy consumption that these devices must also ensure are not enough to allow them to move forward. This is why \hyperref[subsec:cloudcomputing]{cloud computing} needs to be integrated to fill the gaps left by \acrshort{iot} \cite{state_of_the_art_integration_iot_cloudComputing}. Cloud of Things is one of the paradigms given to the combination of these two technologies in 2014 \cite{cloud_of_thing}.
 
 \subsection{Overview}
-A model for integrating \hyperref[subsec:cloudcomputing]{cloud computing} into an embedded system is shown in figure \ref{fig:device_and_cloud_computing}. \cite{integration_embedded_systems_cloudComputing}
+A model for integrating \hyperref[subsec:cloudcomputing]{cloud computing} into an embedded system is shown in figure \ref{fig:device_and_cloud_computing}.
 \begin{center}
     \begingroup
     \includegraphics[width=1\columnwidth]{analysis/device_and_cloud_computing.pdf}
@@ -202,7 +177,7 @@ The discovery of new \acrshort{iot} devices to be integrated into the \gls{cloud
 
 Another point to consider is where the data is stored. Depending on the volume of data, it is best to store it in the physical location closest to the user. Sensitive data must also be managed in accordance with each country's data protection laws. Fortunately, \gls{cloud} providers offer the option of choosing the region where data is stored. \cite{cloud_of_thing}
 
-Security seems to be an issue in integration. In 2016, there was a lack of trust in \gls{cloud} service providers and a lack of awareness of Service-Level Agreements (SLAs) \cite{survey_integration_iot_cloud_computing}. A Service-Level Agreement is a document defining the provision of \gls{cloud} services and the responsibilities of the provider and the customer. \nameref{subsec:56k.cloud} claims some negligence with developers. However, when data is transferred to the \gls{cloud}, the location of databases is not always transparent. Distributing data over several locations, while ensuring high availability, also increases the chances of sensitive data being leaked. A distributed system of this kind is exposed to various potential attacks, such as SQL injections, cross-site scripting attacks and many others. Significant vulnerabilities can also be exposed, including session hijacking and virtual machine evasion. In addition, the computing power constraints associated with connected objects limit the application of public key cryptography to all layers of the system. Two years later, in 2018, in an attempt to partially address this problem, two security models have been proposed using two encryption algorithms (AES and RSA) \cite{secure_integration_iot_cloud_computing}. They can be used to integrate \acrshort{iot} and \hyperref[subsec:cloudcomputing]{cloud computing}. However, they remain sub-optimal and could be the subject of future research.
+Security seems to be an issue in integration. In 2016, there was a lack of trust in \gls{cloud} service providers and a lack of awareness of Service-Level Agreements (SLAs) \cite{survey_integration_iot_cloud_computing}. A Service-Level Agreement is a document defining the provision of \gls{cloud} services and the responsibilities of the provider and the customer. However, when data is transferred to the \gls{cloud}, the location of databases is not always transparent. Distributing data over several locations, while ensuring high availability, also increases the chances of sensitive data being leaked. A distributed system of this kind is exposed to various potential attacks, such as SQL injections, cross-site scripting attacks and many others. Significant vulnerabilities can also be exposed, including session hijacking and virtual machine evasion. In addition, the computing power constraints associated with connected objects limit the application of public key cryptography to all layers of the system. Two years later, in 2018, in an attempt to partially address this problem, two security models have been proposed using two encryption algorithms (AES and RSA) \cite{secure_integration_iot_cloud_computing}. They can be used to integrate \acrshort{iot} and \hyperref[subsec:cloudcomputing]{cloud computing}. However, they remain sub-optimal and could be the subject of future research.
 
 Unnecessary data communication is a current trend. \acrshort{iot} devices generate all kinds of data. It would be interesting to have an \acrshort{iot} gateway that manages traffic by letting data circulate only when it is necessary and only that which is necessary \cite{cloud_of_thing}. This would save energy and make better use of network and \gls{cloud} resources. An architecture for this approach has been presented \cite{unnecessary_data_architecture}.
 
@@ -266,7 +241,7 @@ Terraform is a tool created in 2014 by HashiCorp, written in the Go programming 
     \endgroup
 \end{center}
 
-Pulumi is an \acrshort{iac} tool similar to Terraform, but open source. It is written in the Go language \cite{pulumi_github}. Version 1.0 of Pulumi was released in 2019. This tool can be used with several programming languages, such as TypeScript, JavaScript, Python, Go and .NET. It therefore offers developers the possibility of creating \glspl{cloud_infrastructure} using standard technologies, unlike Terraform. Deployment follows the Terraform model, where a Pulumi application is run to schedule the desired resources in the \gls{cloud_infrastructure}. The deployment engine compares these desired resources with the current state of the stack and determines the necessary actions. The state of the last infrastructure deployment is saved in the Pulumi \Gls{cloud} platform by default. With the Pulumi tool, we're talking about applications, because it uses imperative syntax. Applications describe how the \gls{cloud_infrastructure} should be composed by allocating resource objects whose properties correspond to the desired state. Resources are deployed in parallel if possible, but some resources have dependencies between them. Deployment is managed by the Pulumi \acrshort{cli}. An overview of deployment is shown in figure \ref{fig:pulumi_iac}. \cite{iac_tools}
+Pulumi is an \acrshort{iac} tool similar to Terraform, but open source. It is written in the Go language \cite{pulumi_github}. Version 1.0 of Pulumi was released in 2019. This tool can be used with several programming languages, such as TypeScript, JavaScript, Python, Go and .NET. It therefore offers developers the possibility of creating \glspl{cloud_infrastructure} using standard languages, unlike Terraform. Deployment follows the Terraform model, where a Pulumi application is run to schedule the desired resources in the \gls{cloud_infrastructure}. The deployment engine compares these desired resources with the current state of the stack and determines the necessary actions. The state of the last infrastructure deployment is saved in the Pulumi \Gls{cloud} platform by default. It can also be saved in other storage spaces (Amazon S3 e.g.). With the Pulumi tool, we're talking about applications, because it uses imperative syntax. Applications describe how the \gls{cloud_infrastructure} should be composed by allocating resource objects whose properties correspond to the desired state. Resources are deployed in parallel if possible, but some resources have dependencies between them. Deployment is managed by the Pulumi \acrshort{cli}. An overview of deployment is shown in figure \ref{fig:pulumi_iac}. \cite{iac_tools}
 \begin{center}
     \begingroup
     \includegraphics[width=.8\columnwidth]{analysis/pulumi_iac.pdf}
@@ -313,4 +288,4 @@ SystemReady IR ensures that Linux and \acrshort{bsd} work perfectly on \gls{arm}
 
 SystemReady LS specifies the correct operation of Linux \acrshort{os}s on \gls{arm} chips designed for servers. This certificate is mainly for hyperscalers. Hyperscalers are large \gls{cloud} service providers. \cite{systemready_program}
 
-At present, a multitude of hardware design companies are partnering with \gls{arm} to follow the SystemReady standards. Several embedded systems are already certified and on the market.
+At present, a multitude of hardware design companies are partnering with \gls{arm} to follow the SystemReady standards. Several embedded systems are already certified and on the market. This is the case with the Raspberry Pi 4, for example.
