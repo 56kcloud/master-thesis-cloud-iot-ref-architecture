@@ -76,19 +76,6 @@ Several applications have been developed. Some are essential to the reference ar
     \endgroup
 \end{center}
 
-\subsection{\acrshort{os} update}
-The application used to update \acrlong{os} features is essential to the reference architecture. Keeping Linux up to date is essential for security, stability, performance and compatibility. Security updates correct vulnerabilities, minimising the risk of exploitation by malicious software. Bug fixes and performance optimisations improve system stability and efficiency. Updating also ensures compliance with security requirements and adaptation to new features and standards. By keeping a Linux \acrshort{os} up to date, users can ensure that their system runs at optimum performance while keeping pace with technological developments and industry requirements.
-
-This application does not run in a Docker container, but directly in the Greengrass component. The operation of the application must be kept simple. An activity diagram in figure \ref{fig:activity_diagram_OS_update} shows this.
-\begin{center}
-    \begingroup
-    \includegraphics[width=.2\columnwidth]{design/activity_diagram_OS_update.pdf}
-    \captionof{figure}{\acrshort{os} update application activity diagram}
-    \label{fig:activity_diagram_OS_update}
-    \endgroup
-\end{center}
-When the component starts up the first time the device is launched or after it has been updated, it will execute the Linux commands that have been written. To enable a complete update, the device will restart automatically. The component executes the Linux commands only once for each new version of the component.
-
 \subsection{Certificate rotation}
 On embedded systems communicating with \gls{aws}, unique certificates are used to establish secure connections via the protocols. Certificates have expiry dates for security reasons. The use of certificates with an expiry date makes it possible to limit the time during which a certificate is considered valid. This helps to reduce the risks associated with compromised private keys and ensures that certificates are regularly renewed, incorporating the latest security standards. It is therefore crucial to update certificates on embedded systems before their expiry date. If a certificate expires, secure connections with \gls{cloud} services may be interrupted, leading to communication problems. To avoid this, this application must allow certificates to be managed automatically. It works with the \gls{aws} \acrshort{iot} Device Defender service, which alerts the application when it is time to change a certificate.
 
@@ -126,3 +113,16 @@ This application is connected to the \hyperref[subsec:led_app]{led application} 
 
 \subsection{Corrupt application}
 A corrupted application is also developed to examine the behaviour of the device with \gls{aws} services. The approach is to run a simple Docker application by deliberately providing an incorrect environment for launching the container.
+
+\subsection{\acrshort{os} update}
+The application used to update \acrlong{os} features is essential to the reference architecture. Keeping Linux up to date is essential for security, stability, performance and compatibility. Security updates correct vulnerabilities, minimising the risk of exploitation by malicious software. Bug fixes and performance optimisations improve system stability and efficiency. Updating also ensures compliance with security requirements and adaptation to new features and standards. By keeping a Linux \acrshort{os} up to date, users can ensure that their system runs at optimum performance while keeping pace with technological developments and industry requirements.
+
+This application does not run in a Docker container, but directly in the Greengrass component. The operation of the application must be kept simple. An activity diagram in figure \ref{fig:activity_diagram_OS_update} shows this.
+\begin{center}
+    \begingroup
+    \includegraphics[width=.2\columnwidth]{design/activity_diagram_OS_update.pdf}
+    \captionof{figure}{\acrshort{os} update application activity diagram}
+    \label{fig:activity_diagram_OS_update}
+    \endgroup
+\end{center}
+When the component starts up the first time the device is launched or after it has been updated, it will execute the Linux commands that have been written. To enable a complete update, the device will restart automatically. The component executes the Linux commands only once for each new version of the component.

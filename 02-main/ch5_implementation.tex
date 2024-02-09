@@ -21,7 +21,7 @@ The implementation sets out the concrete realisation of the reference architectu
 \subsection{\Gls{cloud_infrastructure}}
 An \acrfull{iac} tool was selected to orchestrate the efficient deployment of the \gls{cloud_infrastructure} on \gls{aws}, and Pulumi was chosen because of its choice of programming language, in this case Python. The use of the same programming language for the implementation of applications and the description of \gls{aws} resources provides consistency within the project.
 
-Integrating Pulumi is simple. The resources required are described in Python files. The deployment is managed by the Pulumi \acrshort{cli}, which records the state of the infrastructure in an Amazon S3 compartment. This compartment is located in the same \gls{aws} account as the infrastructure, using Amazon S3 to store the state rather than the default Pulumi \Gls{cloud} platform, thus eliminating external dependencies. Figure \ref{fig:pulumi_overview} shows an overview of this part of the implementation.
+Integrating Pulumi is simple. The resources required are described in Python files. The deployment is managed by the Pulumi \acrshort{cli}, which records the state of the infrastructure in an Amazon S3 bucket. This bucket is located in the same \gls{aws} account as the infrastructure, using Amazon S3 to store the state rather than the default Pulumi \Gls{cloud} platform, thus eliminating external dependencies. Figure \ref{fig:pulumi_overview} shows an overview of this part of the implementation.
 \begin{center}
     \begingroup
     \includegraphics[width=.7\columnwidth]{implementation/pulumi_overview.pdf}
@@ -64,7 +64,7 @@ Integrating embedded systems with the \gls{aws} ecosystem is crucial to reaping 
 \end{quote}
 In this implementation, \gls{aws} \acrshort{iot} Greengrass Core software is deployed on embedded systems, acting as an intelligent hub that manages interactions with the \gls{aws} \gls{cloud}. It adapts perfectly to Linux \acrshort{os}. Greengrass components, encapsulating the necessary code, dependencies and resources, are then deployed automatically using mechanisms such as \gls{aws} \acrshort{iot} Greengrass Deployment.
 
-A component must be installed. \textit{Greengrass nucleus} (aws.greengrass.Nucleus) is a mandatory component and the minimum requirement for running \gls{aws} \acrshort{iot} Greengrass Core software on a device. It is configurable to customize and update the \gls{aws} \acrshort{iot} Greengrass Core software \acrlong{ota}.
+A component must be installed. \textit{Greengrass nucleus} (aws.greengrass.Nucleus) is a mandatory component and the minimum requirement for running \gls{aws} \acrshort{iot} Greengrass Core software on a device. It is configurable to customize and update the \gls{aws} \acrshort{iot} Greengrass Core software \acrfull{ota}.
 
 \subsubsection{Communication}
 In this project, components running on an embedded system use the \gls{aws} \acrshort{iot} Greengrass Core \acrfull{ipc} library, available in the \gls{aws} \acrshort{iot} Device SDK, to exchange data with the \gls{aws} \acrshort{iot} Greengrass nucleus and other Greengrass components. The \acrshort{ipc} interface supports the \acrlong{mqtt} communication protocol. \acrshort{mqtt} offers lightweight, asynchronous communication.
@@ -77,9 +77,9 @@ The \acrshort{ipc} interface also facilitates the sending and receiving of \acrs
 All devices with \gls{aws} \acrshort{iot} Greengrass Core software can obtain \acrshort{ota} updates via \acrshort{mqtt}.
 
 \textbf{\gls{aws} \acrshort{iot} Greengrass Core software update}\\
-This functionality is built into the \gls{aws} \acrshort{iot}Greengrass Core software. It is made possible by the \textit{Greengrass nucleus} component and other optional components. The following information is taken from the \gls{aws} documentation \cite{ota_aws_iot}.
+This functionality is built into the \gls{aws} \acrshort{iot} Greengrass Core software. It is made possible by the \textit{Greengrass nucleus} component and other optional components. The following information is taken from the \gls{aws} documentation \cite{ota_aws_iot}.
 
-A few prerequisites must be met before an update can be carried out. Firstly, the Greengrass device must be connected to the \gls{cloud} \gls{aws} in order to receive the deployment. It must be properly configured with certificates and authentication keys to interact with both the \gls{aws} \acrshort{iot} Core and \gls{aws} \acrshort{iot} Greengrass. Finally, the \gls{aws} \acrshort{iot} Greengrass Core software must be configured and run as a system service.
+A few prerequisites must be met before an update can be carried out. Firstly, the Greengrass device must be connected to the \gls{aws} \gls{cloud} in order to receive the deployment. It must be properly configured with certificates and authentication keys to interact with both the \gls{aws} \acrshort{iot} Core and \gls{aws} \acrshort{iot} Greengrass. Finally, the \gls{aws} \acrshort{iot} Greengrass Core software must be configured and run as a system service.
 
 There are a few things to bear in mind when upgrading. The Greengrass nucleus stops. This stops all the other components present. When the nucleus component is shut down, the device's connection to \gls{aws} is lost.
 
@@ -115,7 +115,7 @@ The following table summarises the behaviour of Greengrass updates :
 In this reference architecture, the version of \textit{Greengrass nucleus} is not specified. However, there is one component provided by \gls{aws} (\textit{aws.greengrass.Cli}) and custom components which depend on several components provided by \gls{aws}.
 
 \textbf{Greengrass components update}\\
-For custom or public \gls{aws} components, the \gls{aws} \acrshort{iot} Greengrass Deployment service enables OTA updates.
+For custom or public \gls{aws} components, the \gls{aws} \acrshort{iot} Greengrass Deployment service enables \acrshort{ota} updates.
 
 The prerequisites for an update are the same as for the software update. When an update is deployed, only components with a new version are updated. These components will then be stopped and restarted automatically after being updated. If a deployment error occurs, a rollback is performed and the components resume their course with the old version.
 
@@ -165,10 +165,10 @@ Image creation is managed by Packer \cite{packer}, an open source tool for autom
 
 It works as follows :
 \begin{enumerate}
-    \item \textbf{Packer configuration} (raspios-lite.json) : The Packer configuration file describes all the steps required to create the image. It specifies the constructors (in this case, the Arm constructor), the actions to be performed, the base image sources and other parameters.
+    \item \textbf{Packer configuration} (raspios-lite.json) : The Packer configuration file describes all the steps required to create the image. It specifies the constructors (in this case, the \gls{arm} constructor), the actions to be performed, the base image sources and other parameters.
     \item \textbf{Running Packer} : In this project, Packer runs in a Docker environment. When the container is launched, the tool starts the build process following the specified configuration.
-    \item \textbf{Packer builder ARM plugin} : A plugin \cite{packer_plugin} to the Packer tool is used to build images specific to the Arm architecture. It uses the Arm build model to create a custom image based on the specification.
-    \item \textbf{Actions} : The actions in the configuration file are carried out to configure the image. This may involve installing software, configuring system parameters, etc. In this case, some system parameters are configured using the \textit{set\_os.sh} script. The \gls{provisioning} script \textit{provision.sh} used to install the necessary software is saved in the image and configured to run the first time the operating system is booted. Finally, the claim certificate and its private key are saved in the image.
+    \item \textbf{Packer builder ARM plugin} : A plugin \cite{packer_plugin} to the Packer tool is used to build images specific to the \gls{arm} architecture. It uses the \gls{arm} build model to create a custom image based on the specification.
+    \item \textbf{Actions} : The actions in the configuration file are carried out to configure the image. This may involve installing software, configuring system parameters, etc. In this case, some system parameters are configured using the \textit{set\_os.sh} script. The \gls{provisioning} script \textit{provision.sh} used to install the necessary software is saved in the image and configured to run the first time the \acrshort{os} is booted. Finally, the claim certificate and its private key are saved in the image.
     \item \textbf{Build complete} : Once all the build and configuration steps have been successfully completed, Packer creates a custom image in the specified format (.img in this case).
 \end{enumerate}
 
@@ -187,7 +187,7 @@ Greengrass devices use X.509 certificates for authentication. X.509 certificates
 
 Only devices authorised to be provisioned will receive a certificate. In this implementation, a list allowing the serial numbers of authorised devices to be inserted has been created in a dedicated file (\textit{allowlist.txt}). When the \gls{provisioning} plugin attempts to provision a device, it will first trigger a Lambda function which will check the list to see if the device is authorised. If so, it will receive its unique certificate. If not, it will not receive it and will not be provisioned.
 
-Greengrass devices store certificates in the default Greengrass root folder (\textit{/v2/greengrass/}).
+Greengrass devices store certificates in the default Greengrass root folder (\textit{/greengrass/v2/}).
 
 \subsubsection{Authorization}
 Greengrass devices rely on \gls{aws} \acrshort{iot} policies for authorization. These \gls{aws} \acrshort{iot} policies determine the scope of operations permitted for \gls{aws} \acrshort{iot} devices. They specify, in detail, permissions or denials of access to \gls{aws} \acrshort{iot} Core and \gls{aws} \acrshort{iot} Greengrass data plane operations, including actions such as publishing \acrshort{mqtt} messages. In this architecture, an \gls{aws} \acrshort{iot} policy is created directly from Pulumi. \cite{aws_iot_greengrass_security}
@@ -222,7 +222,7 @@ GitHub Actions works like this :
     \item \textbf{Execution of steps} : Each workflow is made up of steps (jobs) that are executed sequentially or in parallel. These steps can include predefined actions, custom scripts, tests, deployments, etc.
     \item \textbf{Runtime environments} : GitHub Actions provides runtime environments managed by GitHub. In this context, the Ubuntu-based Linux environment is used.
     \item \textbf{Notifications and reports} : The results of each stage of the workflow are recorded and presented in the GitHub interface. Developers can receive notifications of successful or unsuccessful execution of the workflow.
-    \item \textbf{Integration with other services} : GitHub Actions can be integrated with other services and tools, such as cloud deployment services, notification services, secret management tools, etc.
+    \item \textbf{Integration with other services} : GitHub Actions can be integrated with other services and tools, such as \gls{cloud} deployment services, notification services, secret management tools, etc.
     \item \textbf{Actions ecosystem} : GitHub Actions offers a rich ecosystem of pre-built actions that developers can use in their workflows. These actions are reusable units of functionality (tests, deployments, notifications, etc.).
 \end{enumerate}
 
@@ -278,7 +278,7 @@ Only if this flow is successful will the creation of the Linux image begin.
 \end{center}
 
 \subsection{\acrshort{os} image building}
-This process begins by retrieving the configuration file and the claim certificate, along with its associated private key, which have previously been saved in the S3 compartment. The image is then created using the Packer tool and its plugin. The image is created in a Docker container preconfigured with the necessary environment. Once the image has been generated, it is saved in its corresponding S3 compartment.
+This process begins by retrieving the configuration file and the claim certificate, along with its associated private key, which have previously been saved in the S3 bucket. The image is then created using the Packer tool and its plugin. The image is created in a Docker container preconfigured with the necessary environment. Once the image has been generated, it is saved in its corresponding S3 bucket.
 \begin{center}
     \begingroup
     \includegraphics[width=.7\columnwidth]{implementation/build_os.pdf}
@@ -530,10 +530,10 @@ As mentioned in the section on containerization \ref{sec:containerization}, it i
     CMD ["echo", "Corrupt Docker container"]
     \end{minted}
 \end{center}
-The Greengrass component itself is correctly implemented and will run normally. However, when executing the Docker command with the incompatible image, an error occurs.
+The Greengrass component itself is correctly implemented and will run normally. However, when executing the Docker command with the incompatible image, an error occurs and the application is stopped.
 
 \subsection{\acrshort{os} update}
-The application simply consists of command lines. These are written directly in the structure of the Greengrass component. The corresponding file, \textit{recipe.yaml}, is constructed as follows :
+This application simply consists of command lines. These are written directly in the structure of the Greengrass component. The corresponding file, \textit{recipe.yaml}, is constructed as follows :
 \begin{center}
     \usemintedstyle{pastie}
     \begin{minted}
@@ -567,4 +567,4 @@ The application simply consists of command lines. These are written directly in 
                     fi
     \end{minted}
 \end{center}
-Each time the \acrlong{os} needs to be updated, a new version must be assigned to the \textit{update\_no} variable. This represents the name of a file with its path, ensuring that the update is only carried out once. In the script section, a condition checks whether this file has already been created. If so, this means that the \acrshort{os} update has already been performed. If not, the file is created and the commands specified under the comment "\textit{\# Write your commands}" are executed sequentially. These commands, chosen by the developer, are responsible for updating the functionality of the \acrshort{os} and are executed with full administrator privileges. The file created keeps a record that the update has already taken place when the device reboots to ensure the update.
+Each time the \acrshort{os} needs to be updated, a new version must be assigned to the \textit{update\_no} variable. This represents the name of a file with its path, ensuring that the update is only carried out once. In the script section, a condition checks whether this file has already been created. If so, this means that the \acrshort{os} update has already been performed. If not, the file is created and the commands specified under the comment "\textit{\# Write your commands}" are executed sequentially. These commands, chosen by the developer, are responsible for updating the functionality of the \acrshort{os} and are executed with full administrator privileges. The file created keeps a record that the update has already taken place when the device reboots to ensure the update.
